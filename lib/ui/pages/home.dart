@@ -1,7 +1,6 @@
 // ui/pages/home_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '/ui/controllers/navigation_controller.dart';
 import '../widgets/bottom_nav_bar.dart';
 
 class HomePage extends StatelessWidget {

@@ -1,7 +1,6 @@
 // ui/my_app.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '/ui/controllers/navigation_controller.dart';
 import 'pages/home.dart';
 import 'pages/eventos.dart';
 import 'pages/agenda.dart';
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Mi Aplicación',
       debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.noTransition, // <- Global
+      defaultTransition: Transition.noTransition, 
       transitionDuration: Duration.zero,  
       theme: ThemeData(
         primarySwatch: Colors.blue,
