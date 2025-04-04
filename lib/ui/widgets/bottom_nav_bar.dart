@@ -1,4 +1,3 @@
-// widgets/bottom_nav_bar.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/bottom_nav_controller.dart';
