@@ -1,9 +1,9 @@
 import 'package:horizzon/domain/entities/event_track.dart';
 
-class Conference {
+class Master {
   final List<EventTrack> eventTracks;
 
-  Conference({
+  Master({
     required this.eventTracks,
   });
 }

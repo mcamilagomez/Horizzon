@@ -4,14 +4,14 @@ class EventTrack {
   final int id;
   final String name;
   final String description;
-  final List<Event> conferences;
+  final List<Event> events;
   final String coverImageUrl;
 
   EventTrack({
     required this.id,
     required this.name,
     required this.description,
-    required this.conferences,
+    required this.events,
     required this.coverImageUrl,
   });
 }
