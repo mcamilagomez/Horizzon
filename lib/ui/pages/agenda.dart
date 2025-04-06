@@ -50,6 +50,16 @@ class _AgendaPageState extends State<AgendaPage> {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
+    final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
+
+    return Scaffold(
+      backgroundColor: primaryColor,
+      body: Column(
+        children: [
+          TopNavBar(
+            mainTitle: "Mi Calendario",
     final currentMonthYear = DateFormat('MMMM y').format(_currentDate);
     final daysInMonth = _getDaysInMonth();
 
@@ -61,11 +71,13 @@ class _AgendaPageState extends State<AgendaPage> {
           const TopNavBar(
             mainTitle: "Agenda",
             subtitle: "Horizzon",
-            baseColor: Color.fromRGBO(18, 37, 98, 1),
+            baseColor: primaryColor,
             shineIntensity: 0.6,
           ),
+
           
           // Contenido desplazable
+
           Expanded(
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
@@ -73,6 +85,12 @@ class _AgendaPageState extends State<AgendaPage> {
                 topRight: Radius.circular(30.0),
               ),
               child: Container(
+                color: backgroundColor,
+                width: double.infinity,
+                child: Center(
+                  child: Text(
+                    'Contenido Home',
+                    style: TextStyle(fontSize: 16, color: textColor),
                 color: Colors.white,
                 child: SingleChildScrollView(
                   child: Padding(
