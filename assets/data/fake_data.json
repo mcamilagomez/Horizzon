@@ -1,0 +1,76 @@
+{
+  "eventos": [
+    {
+      "id": 1,
+      "name": "Evento1",
+      "description": "Esta es la descripción del evento",
+      "coverImageUrl": "coverEvent1",
+      "conferences": [
+        {
+          "id": 101,
+          "name": "Conferencia de Flutter",
+          "description": "Aprende Flutter desde cero",
+          "speakers": ["Ana Pérez", "Carlos Gómez"],
+          "feedbacks": [
+            {
+              "rating": 5,
+              "comment": "Excelente conferencia"
+            },
+            {
+              "rating": 4,
+              "comment": "Muy buen contenido"
+            }
+          ],
+          "initialDate": "2024-11-20T09:00:00Z",
+          "finalDate": "2024-11-20T11:00:00Z",
+          "location": "Sala A",
+          "capacity": 100,
+          "availableSeats": 25,
+          "coverImageUrl": "coverConf101",
+          "cardImageUrl": "cardConf101"
+        },
+        {
+          "id": 102,
+          "name": "Taller de Firebase",
+          "description": "Domina Firebase en tus apps",
+          "speakers": ["Luisa Martínez"],
+          "feedbacks": [
+            {
+              "rating": 3,
+              "comment": "Podría mejorar"
+            }
+          ],
+          "initialDate": "2024-11-21T14:00:00Z",
+          "finalDate": "2024-11-21T16:30:00Z",
+          "location": "Sala B",
+          "capacity": 50,
+          "availableSeats": 10,
+          "coverImageUrl": "coverConf102",
+          "cardImageUrl": "cardConf102"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Evento2",
+      "description": "Esta es la descripción del evento",
+      "coverImageUrl": "coverEvent2",
+      "conferences": [
+        {
+          "id": 201,
+          "name": "Diseño UX/UI",
+          "description": "Principios de diseño moderno",
+          "speakers": ["Pedro Sánchez", "María Rodríguez"],
+          "feedbacks": [],
+          "initialDate": "2024-12-05T10:00:00Z",
+          "finalDate": "2024-12-05T12:00:00Z",
+          "location": "Auditorio Principal",
+          "capacity": 200,
+          "availableSeats": 45,
+          "coverImageUrl": "coverConf201",
+          "cardImageUrl": "cardConf201"
+        }
+      ]
+    }
+  ]
+}
