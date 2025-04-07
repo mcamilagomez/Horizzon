@@ -5,8 +5,11 @@ import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import '../widgets/event_list.dart';
 
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
+  static const Color primaryColor = Color.fromRGBO(18, 37, 98, 1);
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +20,7 @@ class HomePage extends StatelessWidget {
     final events = master.eventTracks.first.events;
     final primaryColor = const Color.fromRGBO(18, 37, 98, 1);
 
+
     return Scaffold(
       backgroundColor: primaryColor,
       body: Column(
@@ -24,7 +28,7 @@ class HomePage extends StatelessWidget {
           const TopNavBar(
             mainTitle: "Horizzon",
             subtitle: "'Un nuevo evento en el horizonte'",
-            baseColor: Color.fromRGBO(18, 37, 98, 1),
+            baseColor: primaryColor,
             shineIntensity: 0.6,
           ),
           Expanded(
@@ -34,7 +38,7 @@ class HomePage extends StatelessWidget {
                 topRight: Radius.circular(30.0),
               ),
               child: Container(
-                color: Colors.white,
+                color: backgroundColor,
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,6 +61,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ],
+
                 ),
               ),
             ),
