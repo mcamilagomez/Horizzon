@@ -8,8 +8,6 @@ class EventUseCases {
     final today = DateTime(now.year, now.month, now.day);
     final eventStartDay =
         DateTime(initialDate.year, initialDate.month, initialDate.day);
-    final eventEndDay =
-        DateTime(finalDate.year, finalDate.month, finalDate.day);
 
     if (now.isAfter(finalDate)) return "PASADO";
     if (now.isAfter(initialDate) && now.isBefore(finalDate)) return "HOY";

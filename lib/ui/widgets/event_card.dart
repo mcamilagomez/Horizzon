@@ -9,32 +9,25 @@ import '../controllers/event_controller.dart';
 class EventCard extends StatelessWidget {
   final Event event;
   final Color colorPrincipal;
-  final User user;
 
   const EventCard({
     super.key,
     required this.event,
     required this.colorPrincipal,
-    required this.user,
+    required User user,
   });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Provider.of<EventController>(context, listen: false);
     final estadoEvento =
         EventUseCases.whenIs(event.initialDate, event.finalDate);
-    var isSubscribed = EventUseCases.itsSubscribe(event, user.myEvents);
 
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => EventDetailPage(
-              eventId: event.id,
-              titulo: event.name,
-              slogan: event.description,
-              fecha: EventUseCases.formatDate(event.initialDate),
-              detalles: _buildEventDetails(event),
+              event: event,
               colorPrincipal: colorPrincipal,
             ),
           ),
@@ -122,21 +115,13 @@ class EventCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Consumer<EventController>(
                       builder: (context, controller, _) {
+                        final isSubscribed =
+                            controller.checkSubscriptionStatus(event);
                         return SizedBox(
                           height: 30,
                           child: ElevatedButton(
-                            onPressed: () {
-                              final updatedEvents = isSubscribed
-                                  ? EventUseCases.unsubscribe(
-                                      event, user.myEvents)
-                                  : EventUseCases.subscribe(
-                                      event, user.myEvents);
-                              isSubscribed = EventUseCases.itsSubscribe(
-                                  event, updatedEvents);
-                              user.myEvents = updatedEvents;
-
-                              controller.toggleSuscripcion(event.id);
-                            },
+                            onPressed: () =>
+                                controller.toggleSuscripcion(event),
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
@@ -166,17 +151,5 @@ class EventCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _buildEventDetails(Event event) {
-    return '''
-${event.description}
-
-Speakers: ${event.speakers.join(', ')}
-
-Location: ${event.location}
-Capacity: ${event.capacity} (${event.availableSeats} available)
-Fecha: ${EventUseCases.formatDate(event.initialDate)} - ${EventUseCases.whenIs(event.initialDate, event.finalDate)}
-''';
   }
 }

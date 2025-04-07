@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:provider/provider.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import '../widgets/event_list.dart';
@@ -23,12 +21,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     master = Master.createWithSampleData();
     user = User(hash: "123456", myEvents: []);
-  }
-
-  void _updateUserEvents(List<Event> updatedEvents) {
-    setState(() {
-      user.myEvents = updatedEvents;
-    });
   }
 
   @override
