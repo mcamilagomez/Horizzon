@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../widgets/bottom_nav_bar.dart';
-import '../widgets/top_nav_bar.dart'; 
+import '../widgets/top_nav_bar.dart';
 
 class EventosPage extends StatelessWidget {
   const EventosPage({super.key});
@@ -18,7 +17,6 @@ class EventosPage extends StatelessWidget {
             baseColor: Color.fromRGBO(18, 37, 98, 1),
             shineIntensity: 0.6,
           ),
-          
           Expanded(
             child: ClipRRect(
               borderRadius: const BorderRadius.only(

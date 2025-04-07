@@ -1,1 +1,0 @@
-/home/darwin-charris/Escritorio/Movil/flutter/Horizzon/build/app/intermediates/cxx/Debug/6a643370/obj/arm64-v8a

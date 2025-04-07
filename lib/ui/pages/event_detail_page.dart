@@ -22,6 +22,8 @@ class EventDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Provider.of<EventController>(context, listen: false);
+
     return Container(
       color: Colors.white,
       child: Stack(
@@ -82,12 +84,13 @@ class EventDetailPage extends StatelessWidget {
                           return SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: () =>
-                                  controller.toggleSuscripcion(eventId),
+                              onPressed:
+                                  () => controller.toggleSuscripcion(eventId),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: controller.isSuscrito(eventId)
-                                    ? Colors.red
-                                    : Colors.green,
+                                backgroundColor:
+                                    controller.isSuscrito(eventId)
+                                        ? Colors.red
+                                        : Colors.green,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),

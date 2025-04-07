@@ -4,7 +4,7 @@ import 'package:horizzon/domain/entities/master.dart';
 
 class ManageData {
   // Función para crear un objeto Master con datos fijos de prueba
-  static Master addMaster() {
+  static Master createMasterWithData() {
     final eventTracks = [
       EventTrack(
         id: 1,
@@ -118,14 +118,4 @@ class ManageData {
 
     return Master(eventTracks: eventTracks);
   }
-}
-
-void main() {
-  // Obtener los datos de prueba
-  final masterData = ManageData.addMaster();
-
-  // Usar los datos como necesites
-  print('Datos de prueba cargados correctamente');
-  print('Total de EventTracks: ${masterData.eventTracks.length}');
-  print(masterData.eventTracks[0].name);
 }
