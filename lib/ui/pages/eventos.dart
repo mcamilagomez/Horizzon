@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:horizzon/domain/entities/master.dart';
+import 'package:horizzon/domain/entities/user.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import '../widgets/event_list.dart';
@@ -11,7 +12,7 @@ class EventosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final master = Master.createWithSampleData();
     final primaryColor = const Color.fromRGBO(18, 37, 98, 1);
-
+    final user = User(hash: "123", myEvents: []);
     return Scaffold(
       backgroundColor: primaryColor,
       body: Column(
@@ -53,6 +54,7 @@ class EventosPage extends StatelessWidget {
                         EventList(
                           events: track.events,
                           primaryColor: primaryColor,
+                          user: user,
                         ),
                         if (trackIndex != master.eventTracks.length - 1)
                           const Divider(height: 40),
