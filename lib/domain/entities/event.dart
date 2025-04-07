@@ -12,6 +12,7 @@ class Event {
   int availableSeats;
   final String coverImageUrl;
   final String cardImageUrl;
+  final String eventTrackName;
 
   Event({
     required this.id,
@@ -27,6 +28,7 @@ class Event {
     required this.availableSeats,
     required this.coverImageUrl,
     required this.cardImageUrl,
+    required this.eventTrackName,
   });
 }
 

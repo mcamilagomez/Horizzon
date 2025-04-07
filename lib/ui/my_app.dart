@@ -1,6 +1,8 @@
 // ui/my_app.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:horizzon/domain/entities/master.dart';
+import 'package:horizzon/domain/entities/user.dart';
 import 'pages/home.dart';
 import 'pages/eventos.dart';
 import 'pages/agenda.dart';
@@ -12,7 +14,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(BottomNavController()); // Registra el controlador
+    // Crear las instancias que se compartirán
+    final master = Master.createWithSampleData();
+    final user = User(hash: "123456", myEvents: []);
+
+    // Registrar el controlador y las instancias
+    Get.put(BottomNavController());
+    Get.put(master);
+    Get.put(user);
 
     return GetMaterialApp(
       title: 'Mi Aplicación',
@@ -26,7 +35,7 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: '/home',
-          page: () => HomePage(),
+          page: () => HomePage(master: master, user: user),
           transition: Transition.noTransition,
         ),
         GetPage(
