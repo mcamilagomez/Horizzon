@@ -52,7 +52,7 @@ class Master {
             ],
             initialDate: DateTime(2023, 11, 16, 14, 0),
             finalDate: DateTime(2023, 11, 16, 17, 0),
-            location: "Sala A",
+            location: "Sala B",
             capacity: 50,
             availableSeats: 5,
             coverImageUrl: "https://example.com/flutter-workshop.jpg",

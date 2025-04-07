@@ -7,7 +7,7 @@ import '../widgets/event_list.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
+//comentario
   @override
   Widget build(BuildContext context) {
     // Ahora creamos el Master directamente usando el factory constructor
