@@ -1,19 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/user.dart';
+import 'package:provider/provider.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import '../widgets/event_list.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
-//comentario
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late User user;
+  late Master master;
+
+  @override
+  void initState() {
+    super.initState();
+    master = Master.createWithSampleData();
+    user = User(hash: "123456", myEvents: []);
+  }
+
+  void _updateUserEvents(List<Event> updatedEvents) {
+    setState(() {
+      user.myEvents = updatedEvents;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Ahora creamos el Master directamente usando el factory constructor
-    final master = Master.createWithSampleData();
-    final user = User(hash: "123456", myEvents: []);
-
     final events = master.eventTracks.first.events;
     final primaryColor = const Color.fromRGBO(18, 37, 98, 1);
 
@@ -54,6 +73,7 @@ class HomePage extends StatelessWidget {
                       child: EventList(
                         events: events,
                         primaryColor: primaryColor,
+                        user: user,
                       ),
                     ),
                   ],

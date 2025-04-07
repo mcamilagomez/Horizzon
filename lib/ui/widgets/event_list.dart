@@ -1,16 +1,18 @@
-// widgets/event_list.dart
 import 'package:flutter/material.dart';
 import 'package:horizzon/domain/entities/event.dart';
-import 'event_card.dart';
+import 'package:horizzon/domain/entities/user.dart';
+import 'package:horizzon/ui/widgets/event_card.dart';
 
 class EventList extends StatelessWidget {
   final List<Event> events;
   final Color primaryColor;
+  final User user;
 
   const EventList({
     super.key,
     required this.events,
     required this.primaryColor,
+    required this.user,
   });
 
   @override
@@ -22,6 +24,7 @@ class EventList extends StatelessWidget {
         return EventCard(
           event: events[index],
           colorPrincipal: primaryColor,
+          user: user,
         );
       },
     );
