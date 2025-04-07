@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:horizzon/domain/entities/event.dart'; // Asegúrate que esto importa la clase Feedback
+import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/use_case/use_case.dart';
 import 'package:provider/provider.dart';
 import '../controllers/event_controller.dart';
@@ -21,6 +21,7 @@ class EventDetailPage extends StatelessWidget {
       body: Stack(
         children: [
           CustomScrollView(
+            physics: const BouncingScrollPhysics(),
             slivers: [
               SliverAppBar(
                 expandedHeight: 250,
@@ -119,16 +120,21 @@ class EventDetailPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 30),
+                      _buildInlineDetail(
+                          'Linea de evento', event.eventTrackName),
+                      const SizedBox(height: 16),
                       _buildInlineDetail('Lugar', event.location),
                       const SizedBox(height: 16),
-                      _buildInlineDetail('Fecha',
-                          '${EventUseCases.formatDate(event.initialDate)} - ${EventUseCases.formatDate(event.finalDate)}'),
+                      _buildInlineDetail(
+                          'Fecha', EventUseCases.formatDate(event.initialDate)),
                       const SizedBox(height: 16),
                       _buildInlineDetail('Horario',
                           _formatTimeRange(event.initialDate, event.finalDate)),
                       const SizedBox(height: 16),
-                      _buildInlineDetail('Capacidad',
-                          '${event.capacity} personas (${event.availableSeats} disponibles)'),
+                      _buildInlineDetail(
+                          'Capacidad',
+                          '${event.capacity} personas '
+                              '(${event.availableSeats} disponibles)'),
                       const SizedBox(height: 16),
                       if (event.speakers.isNotEmpty) ...[
                         const SizedBox(height: 8),
@@ -150,11 +156,10 @@ class EventDetailPage extends StatelessWidget {
                             )),
                         const SizedBox(height: 24),
                       ],
-                      const Divider(height: 40),
                       Text(
                         'Reviews',
                         style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 30,
                           fontWeight: FontWeight.bold,
                           color: colorPrincipal,
                         ),
@@ -182,7 +187,7 @@ class EventDetailPage extends StatelessWidget {
             top: MediaQuery.of(context).padding.top + 10,
             right: 20,
             child: GestureDetector(
-              onTap: () => Navigator.of(context).pop(),
+              onTap: () => _closeWithTransition(context),
               child: Container(
                 width: 30,
                 height: 30,
@@ -197,7 +202,7 @@ class EventDetailPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Center(
+                child: const Center(
                   child: Icon(
                     Icons.close,
                     color: Colors.white,
@@ -209,6 +214,35 @@ class EventDetailPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _closeWithTransition(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
+  // Método para navegar a esta página con la transición personalizada
+  static PageRouteBuilder<dynamic> buildRoute(Event event, Color color) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => EventDetailPage(
+        event: event,
+        colorPrincipal: color,
+      ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 300),
     );
   }
 

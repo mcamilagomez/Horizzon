@@ -6,26 +6,23 @@ import '../widgets/top_nav_bar.dart';
 import '../widgets/event_list.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final Master master;
+  final User user;
+
+  const HomePage({
+    super.key,
+    required this.master,
+    required this.user,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  late User user;
-  late Master master;
-
-  @override
-  void initState() {
-    super.initState();
-    master = Master.createWithSampleData();
-    user = User(hash: "123456", myEvents: []);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final events = master.eventTracks.first.events;
+    final events = widget.master.eventTracks.first.events;
     final primaryColor = const Color.fromRGBO(18, 37, 98, 1);
 
     return Scaffold(
@@ -65,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                       child: EventList(
                         events: events,
                         primaryColor: primaryColor,
-                        user: user,
+                        user: widget.user,
                       ),
                     ),
                   ],

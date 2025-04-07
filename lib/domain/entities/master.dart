@@ -36,10 +36,7 @@ class Master {
                   userId: "user456",
                   stars: 4,
                   comment: "Buen contenido pero un poco técnico"),
-              FeedbackbyUser(
-                  userId: "user456",
-                  stars: 4,
-                  comment: "Buen contenido pero un poco técnico"),
+              FeedbackbyUser(userId: "user456", stars: 4, comment: ""),
             ],
             initialDate: DateTime(2025, 4, 7, 10, 0),
             finalDate: DateTime(2025, 4, 7, 12, 0),
@@ -48,6 +45,7 @@ class Master {
             availableSeats: 120,
             coverImageUrl: "https://example.com/tech-keynote.jpg",
             cardImageUrl: "/images/cover.jpeg",
+            eventTrackName: "Conferencia de Tecnología 2023",
           ),
           Event(
             id: 102,
@@ -56,12 +54,7 @@ class Master {
             longDescription:
                 "En este taller, profundizaremos en técnicas avanzadas de desarrollo con Flutter.",
             speakers: ["Ing. García"],
-            feedbacks: [
-              FeedbackbyUser(
-                  userId: "user789",
-                  stars: 5,
-                  comment: "El mejor taller al que he asistido"),
-            ],
+            feedbacks: [],
             initialDate: DateTime(2025, 4, 8, 14, 0),
             finalDate: DateTime(2025, 4, 8, 17, 0),
             location: "Sala B",
@@ -69,6 +62,7 @@ class Master {
             availableSeats: 5,
             coverImageUrl: "https://example.com/flutter-workshop.jpg",
             cardImageUrl: "/images/cover.jpeg",
+            eventTrackName: "Conferencia de Tecnología 2023",
           ),
         ],
         coverImageUrl: "https://example.com/tech-conference.jpg",
@@ -93,6 +87,7 @@ class Master {
             availableSeats: 250,
             coverImageUrl: "https://example.com/jazz-concert.jpg",
             cardImageUrl: "https://example.com/jazz-concert-card.jpg",
+            eventTrackName: "Festival de Música Internacional",
           ),
         ],
         coverImageUrl: "https://example.com/music-festival.jpg",
