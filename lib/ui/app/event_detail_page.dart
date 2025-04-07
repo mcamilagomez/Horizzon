@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:horizzon/domain/entities/event.dart';
+import 'package:horizzon/domain/entities/event.dart'; // Asegúrate que esto importa la clase Feedback
 import 'package:horizzon/domain/use_case/use_case.dart';
 import 'package:provider/provider.dart';
 import '../controllers/event_controller.dart';
@@ -20,136 +20,190 @@ class EventDetailPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 60),
-                // Imagen principal del evento
-                Container(
-                  height: 200,
-                  width: double.infinity,
+          CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                expandedHeight: 250,
+                pinned: false,
+                stretch: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Image.asset(
+                    event.cardImageUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                backgroundColor: Colors.transparent,
+                automaticallyImplyLeading: false,
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    image: DecorationImage(
-                      image: AssetImage(event.cardImageUrl),
-                      fit: BoxFit.cover,
+                    color: colorPrincipal,
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(8),
+                      bottomRight: Radius.circular(8),
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-
-                // Título del evento
-                Text(
-                  event.name,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: colorPrincipal,
-                  ),
-                ),
-                const SizedBox(height: 8),
-
-                // Descripción breve
-                Text(
-                  event.description,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Detalles del evento en lista
-                _buildDetailItem(
-                  icon: Icons.calendar_today,
-                  title: 'Fecha y hora',
-                  value:
-                      '${EventUseCases.formatDate(event.initialDate)} - ${_formatTimeRange(event.initialDate, event.finalDate)}',
-                ),
-                _buildDetailItem(
-                  icon: Icons.location_on,
-                  title: 'Ubicación',
-                  value: event.location,
-                ),
-                _buildDetailItem(
-                  icon: Icons.people,
-                  title: 'Capacidad',
-                  value:
-                      '${event.capacity} personas (${event.availableSeats} disponibles)',
-                ),
-                _buildDetailItem(
-                  icon: Icons.person,
-                  title: 'Expositores',
-                  value: event.speakers.join(', '),
-                ),
-                const SizedBox(height: 20),
-
-                // Descripción extendida
-                const Text(
-                  'Acerca de este evento:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  event.description,
-                  style: const TextStyle(fontSize: 16, height: 1.5),
-                ),
-                const SizedBox(height: 30),
-
-                // Botón de suscripción
-                Consumer<EventController>(
-                  builder: (context, controller, _) {
-                    final isSubscribed =
-                        controller.checkSubscriptionStatus(event);
-                    return SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => controller.toggleSuscripcion(event),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              isSubscribed ? Colors.red : Colors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                        child: Text(
-                          isSubscribed
-                              ? 'DESUSCRIBIRSE'
-                              : 'SUSCRIBIRSE A ESTE EVENTO',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              event.name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              event.description,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
+                      const SizedBox(width: 8),
+                      Consumer<EventController>(
+                        builder: (context, controller, _) {
+                          final isSubscribed =
+                              controller.checkSubscriptionStatus(event);
+                          return SizedBox(
+                            height: 30,
+                            child: ElevatedButton(
+                              onPressed: () =>
+                                  controller.toggleSuscripcion(event),
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                backgroundColor:
+                                    isSubscribed ? Colors.red : Colors.green,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: Text(
+                                isSubscribed ? 'Desuscribirse' : 'Suscribirse',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        event.longDescription,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          height: 1.6,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      _buildInlineDetail('Lugar', event.location),
+                      const SizedBox(height: 16),
+                      _buildInlineDetail('Fecha',
+                          '${EventUseCases.formatDate(event.initialDate)} - ${EventUseCases.formatDate(event.finalDate)}'),
+                      const SizedBox(height: 16),
+                      _buildInlineDetail('Horario',
+                          _formatTimeRange(event.initialDate, event.finalDate)),
+                      const SizedBox(height: 16),
+                      _buildInlineDetail('Capacidad',
+                          '${event.capacity} personas (${event.availableSeats} disponibles)'),
+                      const SizedBox(height: 16),
+                      if (event.speakers.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          'Expositores:',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: colorPrincipal,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ...event.speakers.map((speaker) => Padding(
+                              padding: const EdgeInsets.only(bottom: 4),
+                              child: Text(
+                                '• $speaker',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            )),
+                        const SizedBox(height: 24),
+                      ],
+                      const Divider(height: 40),
+                      Text(
+                        'Reviews',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: colorPrincipal,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      if (event.feedbacks.isEmpty)
+                        const Text(
+                          'Aún no hay reviews para este evento',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        )
+                      else
+                        ...event.feedbacks
+                            .map((feedback) => _buildReviewItem(feedback))
+                            .toList(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-
-          // Botón de cerrar
           Positioned(
             top: MediaQuery.of(context).padding.top + 10,
             right: 20,
             child: GestureDetector(
               onTap: () => Navigator.of(context).pop(),
               child: Container(
-                width: 40,
-                height: 40,
+                width: 30,
+                height: 30,
                 decoration: BoxDecoration(
                   color: colorPrincipal,
                   shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-                child: const Icon(Icons.close, color: Colors.white, size: 24),
+                child: Center(
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 15,
+                  ),
+                ),
               ),
             ),
           ),
@@ -158,48 +212,79 @@ class EventDetailPage extends StatelessWidget {
     );
   }
 
-  // Widget para construir ítems de detalle
-  Widget _buildDetailItem({
-    required IconData icon,
-    required String title,
-    required String value,
-  }) {
+  Widget _buildReviewItem(FeedbackbyUser feedback) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: colorPrincipal, size: 24),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54,
-                  ),
+          Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: colorPrincipal.withOpacity(0.2),
+                child: Icon(
+                  Icons.person,
+                  color: colorPrincipal,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                feedback.userId.length > 8
+                    ? '${feedback.userId.substring(0, 8)}...'
+                    : feedback.userId,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+          const SizedBox(height: 8),
+          Row(
+            children: List.generate(5, (index) {
+              return Icon(
+                index < feedback.stars ? Icons.star : Icons.star_border,
+                color: Colors.amber,
+                size: 20,
+              );
+            }),
+          ),
+          const SizedBox(height: 8),
+          if (feedback.comment.isNotEmpty)
+            Text(
+              feedback.comment,
+              style: const TextStyle(
+                fontSize: 16,
+                height: 1.5,
+              ),
+            ),
         ],
       ),
     );
   }
 
-  // Formatear rango de horas
+  Widget _buildInlineDetail(String label, String value) {
+    return RichText(
+      text: TextSpan(
+        style: const TextStyle(
+          fontSize: 16,
+          color: Colors.black,
+          height: 1.5,
+        ),
+        children: [
+          TextSpan(
+            text: '$label: ',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: colorPrincipal,
+            ),
+          ),
+          TextSpan(text: value),
+        ],
+      ),
+    );
+  }
+
   String _formatTimeRange(DateTime start, DateTime end) {
     final startTime =
         '${start.hour}:${start.minute.toString().padLeft(2, '0')}';

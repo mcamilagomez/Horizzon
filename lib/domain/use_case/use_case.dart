@@ -31,6 +31,7 @@ class EventUseCases {
 
   /// Suscribe a un evento
   static List<Event> subscribe(Event event, List<Event> subscribedEvents) {
+    event.availableSeats = event.availableSeats - 1;
     if (!itsSubscribe(event, subscribedEvents)) {
       return [...subscribedEvents, event];
     }
@@ -39,6 +40,7 @@ class EventUseCases {
 
   /// Desuscribe de un evento
   static List<Event> unsubscribe(Event event, List<Event> subscribedEvents) {
+    event.availableSeats = event.availableSeats + 1;
     return subscribedEvents.where((e) => e.id != event.id).toList();
   }
 }

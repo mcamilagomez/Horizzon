@@ -20,13 +20,23 @@ class Master {
             id: 101,
             name: "Keynote: El futuro de la IA",
             description: "Charla principal sobre inteligencia artificial",
+            longDescription:
+                "En esta charla, exploraremos los últimos avances en IA y su impacto en la sociedad.",
             speakers: ["Dr. Smith", "Dra. Johnson"],
             feedbacks: [
-              Feedback(
+              FeedbackbyUser(
                   userId: "user123",
                   stars: 5,
                   comment: "Excelente presentación, muy informativa"),
-              Feedback(
+              FeedbackbyUser(
+                  userId: "user456",
+                  stars: 4,
+                  comment: "Buen contenido pero un poco técnico"),
+              FeedbackbyUser(
+                  userId: "user456",
+                  stars: 4,
+                  comment: "Buen contenido pero un poco técnico"),
+              FeedbackbyUser(
                   userId: "user456",
                   stars: 4,
                   comment: "Buen contenido pero un poco técnico"),
@@ -43,9 +53,11 @@ class Master {
             id: 102,
             name: "Taller de Flutter Avanzado",
             description: "Aprende técnicas avanzadas de Flutter",
+            longDescription:
+                "En este taller, profundizaremos en técnicas avanzadas de desarrollo con Flutter.",
             speakers: ["Ing. García"],
             feedbacks: [
-              Feedback(
+              FeedbackbyUser(
                   userId: "user789",
                   stars: 5,
                   comment: "El mejor taller al que he asistido"),
@@ -70,6 +82,8 @@ class Master {
             id: 201,
             name: "Concierto de Jazz",
             description: "Noche de jazz con artistas premiados",
+            longDescription:
+                "Disfruta de una noche mágica con los mejores músicos de jazz.",
             speakers: ["The Jazz Trio", "Sarah Vocalist"],
             feedbacks: [],
             initialDate: DateTime(2023, 12, 5, 20, 0),

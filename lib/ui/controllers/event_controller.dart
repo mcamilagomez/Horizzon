@@ -22,7 +22,6 @@ class EventController extends ChangeNotifier {
 
     // Actualizar estado interno
     _suscripciones[eventId] = !currentlySubscribed;
-    print(user.myEvents);
     notifyListeners();
   }
 

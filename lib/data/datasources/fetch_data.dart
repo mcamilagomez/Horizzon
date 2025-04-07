@@ -39,7 +39,7 @@ class ManageData implements FetchRepo {
       }
 
       // Crear el nuevo feedback
-      final newFeedback = Feedback(
+      final newFeedback = FeedbackbyUser(
         userId: hash,
         stars: stars,
         comment: comment,
