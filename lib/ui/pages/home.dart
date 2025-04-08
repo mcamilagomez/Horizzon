@@ -27,8 +27,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final events = widget.master.eventTracks.first.events;
     final primaryColor = const Color.fromRGBO(18, 37, 98, 1);
-    final eventController =
-        Provider.of<EventController>(context, listen: false);
 
     return Scaffold(
       backgroundColor: primaryColor,
@@ -71,6 +69,7 @@ class _HomePageState extends State<HomePage> {
                         return EventPillsList(
                           events: controller.user.myEvents,
                           colorPrincipal: primaryColor,
+                          user: widget.user,
                         );
                       },
                     ),
