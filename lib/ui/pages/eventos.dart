@@ -18,6 +18,7 @@ class _EventosPageState extends State<EventosPage> {
   final Map<int, bool> _expandedTracks = {};
   late final Master master;
   final primaryColor = const Color.fromRGBO(18, 37, 98, 1);
+  final String userId = "user123"; // ID de usuario temporal
 
   @override
   void initState() {
@@ -102,7 +103,7 @@ class _EventosPageState extends State<EventosPage> {
                                   child: Column(
                                     children: [
                                       ...eventsToShow.map((event) => 
-                                        _buildCompactEventCard(event, context) // Pasamos el context aquí
+                                        _buildCompactEventCard(event, context)
                                       ).toList(),
                                       if (track.events.length > 2)
                                         _buildExpandButton(track.id, isExpanded),
@@ -133,7 +134,7 @@ class _EventosPageState extends State<EventosPage> {
       height: 140,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(track.coverImageUrl),
+          image: AssetImage(track.coverImageUrl),
           fit: BoxFit.cover,
         ),
         borderRadius: const BorderRadius.only(
@@ -189,9 +190,16 @@ class _EventosPageState extends State<EventosPage> {
     
     return GestureDetector(
       onTap: () {
-        // Navegación a EventDetailPage con la transición personalizada
-        Navigator.of(context).push(
-          EventDetailPage.buildRoute(event, primaryColor),
+        // Navegación a EventDetailPage actualizada
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EventDetailPage(
+              event: event,
+              colorPrincipal: primaryColor,
+              userId: userId,
+            ),
+          ),
         );
       },
       child: Container(
@@ -204,6 +212,18 @@ class _EventosPageState extends State<EventosPage> {
         ),
         child: Row(
           children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: AssetImage(event.coverImageUrl),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
