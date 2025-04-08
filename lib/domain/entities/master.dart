@@ -14,8 +14,8 @@ class Master {
         id: 1,
         name: "Congreso de Inteligencia Artificial",
         description: "Explorando el futuro de la IA y sus aplicaciones",
-        coverImageUrl: "assets/images/ai_congress.jpg",
-        overlayImageUrl: "assets/images/ai_congress_overlay.jpg",
+        coverImageUrl: "assets/images/LE1.jpg",
+        overlayImageUrl: "assets/images/LE1.jpg",
         events: [
           Event(
             id: 101,
@@ -36,7 +36,7 @@ class Master {
             capacity: 300,
             availableSeats: 45,
             coverImageUrl: "assets/images/ethics_ai.jpg",
-            cardImageUrl: "assets/images/ethics_ai_card.jpg",
+            cardImageUrl: "assets/images/ethics_ai.jpg",
             eventTrackName: "Congreso de Inteligencia Artificial",
           ),
           Event(
@@ -53,7 +53,7 @@ class Master {
             capacity: 150,
             availableSeats: 0,
             coverImageUrl: "assets/images/ai_health.jpg",
-            cardImageUrl: "assets/images/ai_health_card.jpg",
+            cardImageUrl: "assets/images/ai_healthjpg",
             eventTrackName: "Congreso de Inteligencia Artificial",
           ),
           Event(
@@ -83,7 +83,7 @@ class Master {
             capacity: 40,
             availableSeats: 8,
             coverImageUrl: "assets/images/ml_advanced.jpg",
-            cardImageUrl: "assets/images/ml_advanced_card.jpg",
+            cardImageUrl: "assets/images/ml_advanced.jpg",
             eventTrackName: "Congreso de Inteligencia Artificial",
           ),
           Event(
@@ -105,7 +105,7 @@ class Master {
             capacity: 80,
             availableSeats: 22,
             coverImageUrl: "assets/images/chatbots.jpg",
-            cardImageUrl: "assets/images/chatbots_card.jpg",
+            cardImageUrl: "assets/images/chatbots.jpg",
             eventTrackName: "Congreso de Inteligencia Artificial",
           ),
           Event(
