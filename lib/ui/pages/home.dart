@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/user.dart';
+import 'package:provider/provider.dart';
+import '../controllers/event_controller.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import '../widgets/event_list.dart';
+import '../widgets/event_pills_list.dart';
 
 class HomePage extends StatefulWidget {
   final Master master;
@@ -24,6 +27,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final events = widget.master.eventTracks.first.events;
     final primaryColor = const Color.fromRGBO(18, 37, 98, 1);
+    final eventController =
+        Provider.of<EventController>(context, listen: false);
 
     return Scaffold(
       backgroundColor: primaryColor,
@@ -47,15 +52,40 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Sección de Recordatorios
                     Padding(
                       padding:
                           const EdgeInsets.only(left: 20, top: 20, bottom: 10),
                       child: Text(
+                        'Recordatorios',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: primaryColor,
+                        ),
+                      ),
+                    ),
+                    // Widget que se actualiza con los cambios
+                    Consumer<EventController>(
+                      builder: (context, controller, _) {
+                        return EventPillsList(
+                          events: controller.user.myEvents,
+                          colorPrincipal: primaryColor,
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Sección de Recomendados
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, bottom: 10),
+                      child: Text(
                         'Recomendados',
                         style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: primaryColor),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: primaryColor,
+                        ),
                       ),
                     ),
                     Expanded(

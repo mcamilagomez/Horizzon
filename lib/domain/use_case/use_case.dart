@@ -43,4 +43,21 @@ class EventUseCases {
     event.availableSeats = event.availableSeats + 1;
     return subscribedEvents.where((e) => e.id != event.id).toList();
   }
+
+  static void addFeedback(String comment, Event event, int stars, String hash) {
+    // Validar que las estrellas estén en un rango válido (ej. 1-5)
+    if (stars < 1 || stars > 5) {
+      throw Exception('El rating debe estar entre 1 y 5 estrellas');
+    }
+
+    // Crear el nuevo feedback
+    final newFeedback = FeedbackbyUser(
+      userId: hash,
+      stars: stars,
+      comment: comment,
+    );
+
+    // Insertar el feedback al principio de la lista
+    event.feedbacks.insert(0, newFeedback);
+  }
 }
