@@ -176,7 +176,7 @@ class Master {
             capacity: 20,
             availableSeats: 0,
             coverImageUrl: "assets/images/japanese_cooking.jpg",
-            cardImageUrl: "assets/images/japanese_cooking_card.jpg",
+            cardImageUrl: "assets/images/japanese_cooking.jpg",
             eventTrackName: "Festival Gastronómico Internacional",
           ),
           Event(
@@ -200,7 +200,7 @@ class Master {
             capacity: 30,
             availableSeats: 5,
             coverImageUrl: "assets/images/wine_cheese.jpg",
-            cardImageUrl: "assets/images/wine_cheese_card.jpg",
+            cardImageUrl: "assets/images/wine_cheesejpg",
             eventTrackName: "Festival Gastronómico Internacional",
           ),
           Event(
