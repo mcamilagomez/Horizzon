@@ -200,7 +200,7 @@ class Master {
             capacity: 30,
             availableSeats: 5,
             coverImageUrl: "assets/images/wine_cheese.jpg",
-            cardImageUrl: "assets/images/wine_cheesejpg",
+            cardImageUrl: "assets/images/wine_cheese.jpg",
             eventTrackName: "Festival Gastronómico Internacional",
           ),
           Event(
@@ -243,7 +243,7 @@ class Master {
             capacity: 25,
             availableSeats: 10,
             coverImageUrl: "assets/images/gluten_free.jpg",
-            cardImageUrl: "assets/images/gluten_free_card.jpg",
+            cardImageUrl: "assets/images/gluten_free.jpg",
             eventTrackName: "Festival Gastronómico Internacional",
           ),
           Event(
@@ -273,7 +273,7 @@ class Master {
             capacity: 20,
             availableSeats: 3,
             coverImageUrl: "assets/images/coffee.jpg",
-            cardImageUrl: "assets/images/coffee_card.jpg",
+            cardImageUrl: "assets/images/coffe.jpg",
             eventTrackName: "Festival Gastronómico Internacional",
           ),
           Event(
@@ -295,7 +295,7 @@ class Master {
             capacity: 30,
             availableSeats: 12,
             coverImageUrl: "assets/images/vegan.jpg",
-            cardImageUrl: "assets/images/vegan_card.jpg",
+            cardImageUrl: "assets/images/vegan.jpg",
             eventTrackName: "Festival Gastronómico Internacional",
           ),
         ],
@@ -305,7 +305,7 @@ class Master {
         name: "Cumbre de Energías Renovables",
         description: "Innovación en energía sostenible",
         coverImageUrl: "assets/images/renewable_energy.jpg",
-        overlayImageUrl: "assets/images/renewable_energy_overlay.jpg",
+        overlayImageUrl: "assets/images/renewable_energy.jpg",
         events: [
           Event(
             id: 301,
@@ -326,7 +326,7 @@ class Master {
             capacity: 200,
             availableSeats: 75,
             coverImageUrl: "assets/images/solar_energy.jpg",
-            cardImageUrl: "assets/images/solar_energy_card.jpg",
+            cardImageUrl: "assets/images/solar_energy.jpg",
             eventTrackName: "Cumbre de Energías Renovables",
           ),
           Event(
@@ -343,7 +343,7 @@ class Master {
             capacity: 150,
             availableSeats: 42,
             coverImageUrl: "assets/images/wind_energy.jpg",
-            cardImageUrl: "assets/images/wind_energy_card.jpg",
+            cardImageUrl: "assets/images/wind_energy.jpg",
             eventTrackName: "Cumbre de Energías Renovables",
           ),
           Event(
@@ -369,7 +369,7 @@ class Master {
             capacity: 180,
             availableSeats: 25,
             coverImageUrl: "assets/images/energy_storage.jpg",
-            cardImageUrl: "assets/images/energy_storage_card.jpg",
+            cardImageUrl: "assets/images/energy_storage.jpg",
             eventTrackName: "Cumbre de Energías Renovables",
           ),
           Event(
@@ -427,7 +427,7 @@ class Master {
             capacity: 200,
             availableSeats: 65,
             coverImageUrl: "assets/images/energy_policy.jpg",
-            cardImageUrl: "assets/images/energy_policy_card.jpg",
+            cardImageUrl: "assets/images/energy_policy.jpg",
             eventTrackName: "Cumbre de Energías Renovables",
           ),
         ],
@@ -437,7 +437,7 @@ class Master {
         name: "Congreso de Medicina Avanzada",
         description: "Innovaciones en el campo de la salud",
         coverImageUrl: "assets/images/medical_congress.jpg",
-        overlayImageUrl: "assets/images/medical_congress_overlay.jpg",
+        overlayImageUrl: "assets/images/medical_congress.jpg",
         events: [
           Event(
             id: 401,
@@ -460,7 +460,7 @@ class Master {
             capacity: 300,
             availableSeats: 45,
             coverImageUrl: "assets/images/oncology.jpg",
-            cardImageUrl: "assets/images/oncology_card.jpg",
+            cardImageUrl: "assets/images/oncology.jpg",
             eventTrackName: "Congreso de Medicina Avanzada",
           ),
           Event(
@@ -477,7 +477,7 @@ class Master {
             capacity: 150,
             availableSeats: 0,
             coverImageUrl: "assets/images/robotic_surgery.jpg",
-            cardImageUrl: "assets/images/robotic_surgery_card.jpg",
+            cardImageUrl: "assets/images/robotic_surgery.jpg",
             eventTrackName: "Congreso de Medicina Avanzada",
           ),
           Event(
@@ -497,7 +497,7 @@ class Master {
             capacity: 200,
             availableSeats: 28,
             coverImageUrl: "assets/images/neuroscience.jpg",
-            cardImageUrl: "assets/images/neuroscience_card.jpg",
+            cardImageUrl: "assets/images/neuroscience.jpg",
             eventTrackName: "Congreso de Medicina Avanzada",
           ),
         ],
@@ -507,7 +507,7 @@ class Master {
         name: "Festival de Cine Independiente",
         description: "Lo mejor del cine alternativo mundial",
         coverImageUrl: "assets/images/film_festival.jpg",
-        overlayImageUrl: "assets/images/film_festival_overlay.jpg",
+        overlayImageUrl: "assets/images/film_festival.jpg",
         events: [
           Event(
             id: 501,
@@ -530,7 +530,7 @@ class Master {
             capacity: 250,
             availableSeats: 12,
             coverImageUrl: "assets/images/voices_silence.jpg",
-            cardImageUrl: "assets/images/voices_silence_card.jpg",
+            cardImageUrl: "assets/images/voices_silence.jpg",
             eventTrackName: "Festival de Cine Independiente",
           ),
           Event(
@@ -547,7 +547,7 @@ class Master {
             capacity: 30,
             availableSeats: 5,
             coverImageUrl: "assets/images/screenwriting.jpg",
-            cardImageUrl: "assets/images/screenwriting_card.jpg",
+            cardImageUrl: "assets/images/screenwriting.jpg",
             eventTrackName: "Festival de Cine Independiente",
           ),
         ],
@@ -557,7 +557,7 @@ class Master {
         name: "Convención de Videojuegos",
         description: "El universo gamer en un solo lugar",
         coverImageUrl: "assets/images/gaming_convention.jpg",
-        overlayImageUrl: "assets/images/gaming_convention_overlay.jpg",
+        overlayImageUrl: "assets/images/gaming_convention.jpg",
         events: [
           Event(
             id: 601,
@@ -583,7 +583,7 @@ class Master {
             capacity: 500,
             availableSeats: 0,
             coverImageUrl: "assets/images/cyber_odyssey.jpg",
-            cardImageUrl: "assets/images/cyber_odyssey_card.jpg",
+            cardImageUrl: "assets/images/cyber_odyssey.jpg",
             eventTrackName: "Convención de Videojuegos",
           ),
           Event(
@@ -600,7 +600,7 @@ class Master {
             capacity: 1000,
             availableSeats: 150,
             coverImageUrl: "assets/images/esports.jpg",
-            cardImageUrl: "assets/images/esports_card.jpg",
+            cardImageUrl: "assets/images/esports.jpg",
             eventTrackName: "Convención de Videojuegos",
           ),
         ],
@@ -610,7 +610,7 @@ class Master {
         name: "Foro de Emprendimiento",
         description: "Herramientas para hacer crecer tu negocio",
         coverImageUrl: "assets/images/entrepreneurship.jpg",
-        overlayImageUrl: "assets/images/entrepreneurship_overlay.jpg",
+        overlayImageUrl: "assets/images/entrepreneurship.jpg",
         events: [
           Event(
             id: 701,
@@ -633,7 +633,7 @@ class Master {
             capacity: 200,
             availableSeats: 35,
             coverImageUrl: "assets/images/startup_funding.jpg",
-            cardImageUrl: "assets/images/startup_funding_card.jpg",
+            cardImageUrl: "assets/images/startup_funding.jpg",
             eventTrackName: "Foro de Emprendimiento",
           ),
         ],
@@ -643,7 +643,7 @@ class Master {
         name: "Expo Tecnología Educativa",
         description: "Innovación para transformar la educación",
         coverImageUrl: "assets/images/edtech.jpg",
-        overlayImageUrl: "assets/images/edtech_overlay.jpg",
+        overlayImageUrl: "assets/images/edtech.jpg",
         events: [
           Event(
             id: 801,
@@ -663,8 +663,8 @@ class Master {
             location: "Sala Innovación",
             capacity: 100,
             availableSeats: 0,
-            coverImageUrl: "assets/images/vr_education.jpg",
-            cardImageUrl: "assets/images/vr_education_card.jpg",
+            coverImageUrl: "assets/images/vr_educati    on.jpg",
+            cardImageUrl: "assets/images/vr_education.jpg",
             eventTrackName: "Expo Tecnología Educativa",
           ),
           Event(
@@ -681,7 +681,7 @@ class Master {
             capacity: 40,
             availableSeats: 12,
             coverImageUrl: "assets/images/gamification.jpg",
-            cardImageUrl: "assets/images/gamification_card.jpg",
+            cardImageUrl: "assets/images/gamificacion.jpg",
             eventTrackName: "Expo Tecnología Educativa",
           ),
         ],
@@ -691,7 +691,7 @@ class Master {
         name: "Exposición de Arte Contemporáneo",
         description: "Obras innovadoras de artistas emergentes",
         coverImageUrl: "assets/images/art_exhibition.jpg",
-        overlayImageUrl: "assets/images/art_exhibition_overlay.jpg",
+        overlayImageUrl: "assets/images/art_exhibition.jpg",
         events: [
           Event(
             id: 2001,
@@ -722,7 +722,7 @@ class Master {
             capacity: 100,
             availableSeats: 25,
             coverImageUrl: "assets/images/artist_talk.jpg",
-            cardImageUrl: "assets/images/artist_talk_card.jpg",
+            cardImageUrl: "assets/images/artist_talk.jpg",
             eventTrackName: "Exposición de Arte Contemporáneo",
           ),
           Event(
@@ -744,7 +744,7 @@ class Master {
             capacity: 15,
             availableSeats: 0,
             coverImageUrl: "assets/images/digital_art.jpg",
-            cardImageUrl: "assets/images/digital_art_card.jpg",
+            cardImageUrl: "assets/images/digital_artr.jpg",
             eventTrackName: "Exposición de Arte Contemporáneo",
           ),
           Event(
@@ -761,7 +761,7 @@ class Master {
             capacity: 200,
             availableSeats: 80,
             coverImageUrl: "assets/images/art_performance.jpg",
-            cardImageUrl: "assets/images/art_performance_card.jpg",
+            cardImageUrl: "assets/images/art_performance.jpg",
             eventTrackName: "Exposición de Arte Contemporáneo",
           ),
           Event(
@@ -789,7 +789,7 @@ class Master {
             capacity: 120,
             availableSeats: 35,
             coverImageUrl: "assets/images/art_activism.jpg",
-            cardImageUrl: "assets/images/art_activism_card.jpg",
+            cardImageUrl: "assets/images/art_activism.jpg",
             eventTrackName: "Exposición de Arte Contemporáneo",
           ),
           Event(
@@ -819,7 +819,7 @@ class Master {
             capacity: 30,
             availableSeats: 8,
             coverImageUrl: "assets/images/mixed_media.jpg",
-            cardImageUrl: "assets/images/mixed_media_card.jpg",
+            cardImageUrl: "assets/images/mixed_media.jpg",
             eventTrackName: "Exposición de Arte Contemporáneo",
           ),
         ],
