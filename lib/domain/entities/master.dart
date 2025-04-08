@@ -59,7 +59,7 @@ class Master {
             finalDate: DateTime(2025, 4, 8, 17, 0),
             location: "Sala B",
             capacity: 50,
-            availableSeats: 5,
+            availableSeats: 0,
             coverImageUrl: "https://example.com/flutter-workshop.jpg",
             cardImageUrl: "assets/images/cover.jpeg",
             eventTrackName: "Conferencia de Tecnología 2023",

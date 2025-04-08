@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:horizzon/domain/entities/event.dart';
+import 'package:horizzon/domain/entities/user.dart';
 import 'package:horizzon/domain/use_case/use_case.dart';
 import 'package:provider/provider.dart';
 import '../controllers/event_controller.dart';
@@ -7,13 +8,13 @@ import '../controllers/event_controller.dart';
 class EventDetailPage extends StatefulWidget {
   final Event event;
   final Color colorPrincipal;
-  final String userId;
+  final User user;
 
   const EventDetailPage({
     super.key,
     required this.event,
     required this.colorPrincipal,
-    required this.userId,
+    required this.user,
   });
 
   @override
@@ -48,14 +49,13 @@ class _EventDetailPageState extends State<EventDetailPage> {
         _commentController.text,
         widget.event,
         _selectedStars,
-        'User${widget.userId}',
+        'User${widget.user.hash}',
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('¡Gracias por tu review!')),
       );
 
-      // Limpiar el formulario
       _commentController.clear();
       setState(() {
         _selectedStars = 0;
@@ -131,23 +131,49 @@ class _EventDetailPageState extends State<EventDetailPage> {
                         builder: (context, controller, _) {
                           final isSubscribed =
                               controller.checkSubscriptionStatus(widget.event);
+                          final isEventOver =
+                              EventUseCases.isOver(widget.event.finalDate);
+                          final isEventAvailable = EventUseCases.isAvailable(
+                              widget.event, widget.user);
+
+                          Color buttonColor;
+                          String buttonText;
+                          bool isButtonEnabled;
+
+                          if (isEventOver) {
+                            buttonColor = Colors.grey;
+                            buttonText =
+                                isSubscribed ? 'Desuscribirse' : 'Suscribirse';
+                            isButtonEnabled = false;
+                          } else if (!isEventAvailable) {
+                            buttonColor = Colors.grey;
+                            buttonText = 'No disponible';
+                            isButtonEnabled = false;
+                          } else {
+                            buttonColor =
+                                isSubscribed ? Colors.red : Colors.green;
+                            buttonText =
+                                isSubscribed ? 'Desuscribirse' : 'Suscribirse';
+                            isButtonEnabled = true;
+                          }
+
                           return SizedBox(
                             height: 30,
                             child: ElevatedButton(
-                              onPressed: () =>
-                                  controller.toggleSuscripcion(widget.event),
+                              onPressed: isButtonEnabled
+                                  ? () =>
+                                      controller.toggleSuscripcion(widget.event)
+                                  : null,
                               style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                ),
-                                backgroundColor:
-                                    isSubscribed ? Colors.red : Colors.green,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                backgroundColor: buttonColor,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
                               child: Text(
-                                isSubscribed ? 'Desuscribirse' : 'Suscribirse',
+                                buttonText,
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
@@ -222,16 +248,12 @@ class _EventDetailPageState extends State<EventDetailPage> {
                         ),
                       ),
                       const SizedBox(height: 16),
-
-                      // Formulario para agregar reviews - VERSIÓN ACTUALIZADA
                       Form(
                         key: _formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 8),
-
-                            // Selector de estrellas
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: List.generate(5, (index) {
@@ -252,8 +274,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
                               }),
                             ),
                             const SizedBox(height: 16),
-
-                            // Campo de comentario - AHORA MÁS COMPACTO
                             TextFormField(
                               controller: _commentController,
                               decoration: InputDecoration(
@@ -271,8 +291,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
                               minLines: 1,
                             ),
                             const SizedBox(height: 16),
-
-                            // Botón de enviar - CON BORDES REDONDEADOS
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
@@ -303,7 +321,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
                           ],
                         ),
                       ),
-
                       if (widget.event.feedbacks.isEmpty)
                         const Text(
                           'Aún no hay reviews para este evento',

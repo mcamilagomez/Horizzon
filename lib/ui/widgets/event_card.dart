@@ -17,6 +17,7 @@ class EventCard extends StatelessWidget {
     required this.colorPrincipal,
     required this.user,
   });
+
   @override
   Widget build(BuildContext context) {
     final estadoEvento =
@@ -29,7 +30,7 @@ class EventCard extends StatelessWidget {
             builder: (context) => EventDetailPage(
               event: event,
               colorPrincipal: colorPrincipal,
-              userId: user.hash,
+              user: user,
             ),
           ),
         );
@@ -118,23 +119,48 @@ class EventCard extends StatelessWidget {
                       builder: (context, controller, _) {
                         final isSubscribed =
                             controller.checkSubscriptionStatus(event);
+                        final isEventOver =
+                            EventUseCases.isOver(event.finalDate);
+                        final isEventAvailable =
+                            EventUseCases.isAvailable(event, user);
+
+                        Color buttonColor;
+                        String buttonText;
+                        bool isButtonEnabled;
+
+                        if (isEventOver) {
+                          buttonColor = Colors.grey;
+                          buttonText =
+                              isSubscribed ? 'Desuscribirse' : 'Suscribirse';
+                          isButtonEnabled = false;
+                        } else if (!isEventAvailable) {
+                          buttonColor = Colors.grey;
+                          buttonText = 'No disponible';
+                          isButtonEnabled = false;
+                        } else {
+                          buttonColor =
+                              isSubscribed ? Colors.red : Colors.green;
+                          buttonText =
+                              isSubscribed ? 'Desuscribirse' : 'Suscribirse';
+                          isButtonEnabled = true;
+                        }
+
                         return SizedBox(
                           height: 30,
                           child: ElevatedButton(
-                            onPressed: () =>
-                                controller.toggleSuscripcion(event),
+                            onPressed: isButtonEnabled
+                                ? () => controller.toggleSuscripcion(event)
+                                : null,
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                              ),
-                              backgroundColor:
-                                  isSubscribed ? Colors.red : Colors.green,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              backgroundColor: buttonColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                             child: Text(
-                              isSubscribed ? 'Desuscribirse' : 'Suscribirse',
+                              buttonText,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,

@@ -1,5 +1,6 @@
 // lib/domain/use_case/use_case.dart
 import 'package:horizzon/domain/entities/event.dart';
+import 'package:horizzon/domain/entities/user.dart';
 
 class EventUseCases {
   /// Determina el estado temporal de un evento
@@ -9,14 +10,30 @@ class EventUseCases {
     final eventStartDay =
         DateTime(initialDate.year, initialDate.month, initialDate.day);
 
-    if (now.isAfter(finalDate)) return "PASADO";
+    // Casos especiales que mantienen texto descriptivo
     if (now.isAfter(initialDate) && now.isBefore(finalDate)) return "HOY";
 
     final difference = eventStartDay.difference(today).inDays;
     if (difference == 0) return "HOY";
     if (difference == 1) return "MAÑANA";
-    if (difference > 1) return "PROXIMAMENTE";
-    return "PASADO";
+
+    // Formato de fecha para todos los demás casos (pasados o futuros)
+    final monthNames = [
+      "ENE",
+      "FEB",
+      "MAR",
+      "ABR",
+      "MAY",
+      "JUN",
+      "JUL",
+      "AGS",
+      "SEP",
+      "OCT",
+      "NOV",
+      "DIC"
+    ];
+
+    return "${initialDate.day} ${monthNames[initialDate.month - 1]}";
   }
 
   /// Formatea la fecha en formato dd/mm/yyyy
@@ -59,5 +76,17 @@ class EventUseCases {
 
     // Insertar el feedback al principio de la lista
     event.feedbacks.insert(0, newFeedback);
+  }
+
+  /// Verifica si el evento ya terminó
+  static bool isOver(DateTime finalDate) {
+    return DateTime.now().isAfter(finalDate);
+  }
+
+  /// Verifica si el evento está disponible para suscripción
+  static bool isAvailable(Event event, User user) {
+    final isNotSubscribed = !user.myEvents.any((e) => e.id == event.id);
+    final hasAvailableSeats = event.availableSeats > 0;
+    return isNotSubscribed && hasAvailableSeats;
   }
 }
