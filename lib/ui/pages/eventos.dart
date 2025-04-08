@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/event_track.dart';
+import 'package:horizzon/domain/entities/user.dart'; // <-- importación del User
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import '/ui/app/event_detail_page.dart';
 
 class EventosPage extends StatefulWidget {
-  const EventosPage({super.key});
+  final User user;
+
+  const EventosPage({super.key, required this.user});
 
   @override
   State<EventosPage> createState() => _EventosPageState();
@@ -18,7 +21,6 @@ class _EventosPageState extends State<EventosPage> {
   final Map<int, bool> _expandedTracks = {};
   late final Master master;
   final primaryColor = const Color.fromRGBO(18, 37, 98, 1);
-  final String userId = "user123"; // ID de usuario temporal
 
   @override
   void initState() {
@@ -41,7 +43,6 @@ class _EventosPageState extends State<EventosPage> {
             baseColor: Color.fromRGBO(18, 37, 98, 1),
             shineIntensity: 0.6,
           ),
-          
           Expanded(
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
@@ -66,7 +67,6 @@ class _EventosPageState extends State<EventosPage> {
                         ),
                       ),
                     ),
-                    
                     Expanded(
                       child: ListView.builder(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -74,8 +74,8 @@ class _EventosPageState extends State<EventosPage> {
                         itemBuilder: (context, trackIndex) {
                           final track = master.eventTracks[trackIndex];
                           final isExpanded = _expandedTracks[track.id] ?? false;
-                          final eventsToShow = isExpanded 
-                              ? track.events 
+                          final eventsToShow = isExpanded
+                              ? track.events
                               : track.events.take(2).toList();
 
                           return Container(
@@ -102,9 +102,8 @@ class _EventosPageState extends State<EventosPage> {
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                   child: Column(
                                     children: [
-                                      ...eventsToShow.map((event) => 
-                                        _buildCompactEventCard(event, context)
-                                      ).toList(),
+                                      ...eventsToShow.map((event) =>
+                                          _buildCompactEventCard(event, context)).toList(),
                                       if (track.events.length > 2)
                                         _buildExpandButton(track.id, isExpanded),
                                     ],
@@ -187,17 +186,16 @@ class _EventosPageState extends State<EventosPage> {
 
   Widget _buildCompactEventCard(Event event, BuildContext context) {
     final isSubscribed = _subscribedEvents.contains(event.id);
-    
+
     return GestureDetector(
       onTap: () {
-        // Navegación a EventDetailPage actualizada
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => EventDetailPage(
               event: event,
               colorPrincipal: primaryColor,
-              userId: userId,
+              user: widget.user, // ✅ Pasamos el objeto User aquí
             ),
           ),
         );
@@ -292,7 +290,9 @@ class _EventosPageState extends State<EventosPage> {
             size: 24,
           ),
           Text(
-            isExpanded ? "Mostrar menos" : "Mostrar más (${master.eventTracks.firstWhere((t) => t.id == trackId).events.length - 2})",
+            isExpanded
+                ? "Mostrar menos"
+                : "Mostrar más (${master.eventTracks.firstWhere((t) => t.id == trackId).events.length - 2})",
             style: const TextStyle(fontSize: 12),
           ),
         ],
