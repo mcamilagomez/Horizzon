@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:horizzon/domain/entities/event.dart';
+import 'package:horizzon/domain/entities/event_track.dart';
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/user.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +9,8 @@ import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import '../widgets/event_list.dart';
 import '../widgets/event_pills_list.dart';
+
+import 'dart:math'; // Importar para usar Random
 
 class HomePage extends StatefulWidget {
   final Master master;
@@ -23,9 +27,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late List<Event> randomEvents;
+
+  @override
+  void initState() {
+    super.initState();
+    randomEvents = _getRandomEvents(widget.master.eventTracks, 20);
+  }
+
+  List<Event> _getRandomEvents(List<EventTrack> eventTracks, int count) {
+    // Obtener todos los eventos de todos los tracks en una sola lista
+    final allEvents = eventTracks.expand((track) => track.events).toList();
+
+    // Mezclar la lista aleatoriamente
+    allEvents.shuffle(Random());
+
+    // Tomar los primeros 'count' eventos (o menos si no hay suficientes)
+    return allEvents.take(count).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final events = widget.master.eventTracks.first.events;
     final primaryColor = const Color.fromRGBO(18, 37, 98, 1);
 
     return Scaffold(
@@ -89,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Expanded(
                       child: EventList(
-                        events: events,
+                        events: randomEvents, // Usar los eventos aleatorios
                         primaryColor: primaryColor,
                         user: widget.user,
                       ),
