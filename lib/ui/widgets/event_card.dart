@@ -9,14 +9,14 @@ import '../controllers/event_controller.dart';
 class EventCard extends StatelessWidget {
   final Event event;
   final Color colorPrincipal;
+  final User user;
 
   const EventCard({
     super.key,
     required this.event,
     required this.colorPrincipal,
-    required User user,
+    required this.user,
   });
-
   @override
   Widget build(BuildContext context) {
     final estadoEvento =
@@ -29,6 +29,7 @@ class EventCard extends StatelessWidget {
             builder: (context) => EventDetailPage(
               event: event,
               colorPrincipal: colorPrincipal,
+              userId: user.hash,
             ),
           ),
         );
