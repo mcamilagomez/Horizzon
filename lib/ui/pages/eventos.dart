@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/event_track.dart';
-import 'package:horizzon/domain/entities/user.dart'; // <-- importación del User
+import 'package:horizzon/domain/entities/user.dart';
+import 'package:horizzon/domain/use_case/use_case.dart';
+import 'package:provider/provider.dart';
+import '../controllers/event_controller.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import '/ui/app/event_detail_page.dart';
@@ -17,7 +20,6 @@ class EventosPage extends StatefulWidget {
 }
 
 class _EventosPageState extends State<EventosPage> {
-  final Set<int> _subscribedEvents = {};
   final Map<int, bool> _expandedTracks = {};
   late final Master master;
   final primaryColor = const Color.fromRGBO(18, 37, 98, 1);
@@ -99,11 +101,13 @@ class _EventosPageState extends State<EventosPage> {
                               children: [
                                 _buildTrackHeader(track),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8),
                                   child: Column(
                                     children: [
                                       ...eventsToShow.map((event) =>
-                                          _buildCompactEventCard(event, context)).toList(),
+                                          _buildCompactEventCard(event, context))
+                                          .toList(),
                                       if (track.events.length > 2)
                                         _buildExpandButton(track.id, isExpanded),
                                     ],
@@ -185,8 +189,6 @@ class _EventosPageState extends State<EventosPage> {
   }
 
   Widget _buildCompactEventCard(Event event, BuildContext context) {
-    final isSubscribed = _subscribedEvents.contains(event.id);
-
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -195,7 +197,7 @@ class _EventosPageState extends State<EventosPage> {
             builder: (context) => EventDetailPage(
               event: event,
               colorPrincipal: primaryColor,
-              user: widget.user, // ✅ Pasamos el objeto User aquí
+              user: widget.user,
             ),
           ),
         );
@@ -249,26 +251,54 @@ class _EventosPageState extends State<EventosPage> {
               ),
             ),
             const SizedBox(width: 8),
-            SizedBox(
-              height: 32,
-              width: 100,
-              child: ElevatedButton(
-                onPressed: () => _toggleSubscription(event.id),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: isSubscribed ? Colors.red : Colors.green,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
+            Consumer<EventController>(
+              builder: (context, controller, _) {
+                final isSubscribed = controller.checkSubscriptionStatus(event);
+                final isEventOver = EventUseCases.isOver(event.finalDate);
+                final isEventAvailable = EventUseCases.isAvailable(event, widget.user);
+
+                Color buttonColor;
+                String buttonText;
+                bool isButtonEnabled;
+
+                if (isEventOver) {
+                  buttonColor = Colors.grey;
+                  buttonText = isSubscribed ? 'Suscrito' : 'Suscribirse';
+                  isButtonEnabled = false;
+                } else if (!isEventAvailable) {
+                  buttonColor = Colors.grey;
+                  buttonText = 'No disponible';
+                  isButtonEnabled = false;
+                } else {
+                  buttonColor = isSubscribed ? Colors.red : Colors.green;
+                  buttonText = isSubscribed ? 'Suscrito' : 'Suscribirse';
+                  isButtonEnabled = true;
+                }
+
+                return SizedBox(
+                  height: 32,
+                  width: 100,
+                  child: ElevatedButton(
+                    onPressed: isButtonEnabled
+                        ? () => controller.toggleSuscripcion(event)
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: buttonColor,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    child: Text(
+                      buttonText,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                ),
-                child: Text(
-                  isSubscribed ? "Suscrito" : "Suscribirse",
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+                );
+              },
             ),
           ],
         ),
@@ -298,16 +328,6 @@ class _EventosPageState extends State<EventosPage> {
         ],
       ),
     );
-  }
-
-  void _toggleSubscription(int eventId) {
-    setState(() {
-      if (_subscribedEvents.contains(eventId)) {
-        _subscribedEvents.remove(eventId);
-      } else {
-        _subscribedEvents.add(eventId);
-      }
-    });
   }
 
   void _toggleTrackExpansion(int trackId) {
