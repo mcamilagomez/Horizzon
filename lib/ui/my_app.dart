@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: '/eventos',
-          page: () => EventosPage(),
+          page: () => EventosPage(user: user),
           transition: Transition.noTransition,
         ),
         GetPage(
