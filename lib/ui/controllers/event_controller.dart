@@ -19,7 +19,7 @@ class EventController extends ChangeNotifier {
     user.myEvents = currentlySubscribed
         ? EventUseCases.unsubscribe(event, user.myEvents)
         : EventUseCases.subscribe(event, user.myEvents);
-
+    print(user.myEvents);
     // Actualizar estado interno
     _suscripciones[eventId] = !currentlySubscribed;
     notifyListeners();
@@ -29,5 +29,20 @@ class EventController extends ChangeNotifier {
   bool checkSubscriptionStatus(Event event) {
     return isSuscrito(event.id) ||
         EventUseCases.itsSubscribe(event, user.myEvents);
+  }
+
+  void actualizarEventosUsuario(Event event) {
+    final alreadyExists = user.myEvents.any((e) => e.id == event.id);
+
+    if (!alreadyExists) {
+      user.myEvents.add(event);
+      notifyListeners(); // Notifica a los widgets suscritos
+    }
+  }
+
+  // Método alternativo si necesitas reemplazar toda la lista
+  void actualizarListaEventos(List<Event> nuevosEventos) {
+    user.myEvents = List.from(nuevosEventos);
+    notifyListeners();
   }
 }

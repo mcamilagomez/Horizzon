@@ -4,15 +4,70 @@ import 'package:horizzon/domain/use_case/use_case.dart';
 import 'package:provider/provider.dart';
 import '../controllers/event_controller.dart';
 
-class EventDetailPage extends StatelessWidget {
+class EventDetailPage extends StatefulWidget {
   final Event event;
   final Color colorPrincipal;
+  final String userId;
 
   const EventDetailPage({
     super.key,
     required this.event,
     required this.colorPrincipal,
+    required this.userId,
   });
+
+  @override
+  State<EventDetailPage> createState() => _EventDetailPageState();
+}
+
+class _EventDetailPageState extends State<EventDetailPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _commentController = TextEditingController();
+  int _selectedStars = 0;
+  bool _isSubmitting = false;
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
+
+  void _submitFeedback(BuildContext context) async {
+    if (_selectedStars == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Por favor selecciona un rating de estrellas')),
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      EventUseCases.addFeedback(
+        _commentController.text,
+        widget.event,
+        _selectedStars,
+        'User${widget.userId}',
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('¡Gracias por tu review!')),
+      );
+
+      // Limpiar el formulario
+      _commentController.clear();
+      setState(() {
+        _selectedStars = 0;
+        _isSubmitting = false;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+      setState(() => _isSubmitting = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +84,7 @@ class EventDetailPage extends StatelessWidget {
                 stretch: true,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Image.asset(
-                    event.cardImageUrl,
+                    widget.event.cardImageUrl,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -40,7 +95,7 @@ class EventDetailPage extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: colorPrincipal,
+                    color: widget.colorPrincipal,
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(8),
                       bottomRight: Radius.circular(8),
@@ -54,7 +109,7 @@ class EventDetailPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              event.name,
+                              widget.event.name,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -62,7 +117,7 @@ class EventDetailPage extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              event.description,
+                              widget.event.description,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
@@ -75,12 +130,12 @@ class EventDetailPage extends StatelessWidget {
                       Consumer<EventController>(
                         builder: (context, controller, _) {
                           final isSubscribed =
-                              controller.checkSubscriptionStatus(event);
+                              controller.checkSubscriptionStatus(widget.event);
                           return SizedBox(
                             height: 30,
                             child: ElevatedButton(
                               onPressed: () =>
-                                  controller.toggleSuscripcion(event),
+                                  controller.toggleSuscripcion(widget.event),
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 8,
@@ -113,7 +168,7 @@ class EventDetailPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        event.longDescription,
+                        widget.event.longDescription,
                         style: const TextStyle(
                           fontSize: 18,
                           height: 1.6,
@@ -121,33 +176,35 @@ class EventDetailPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 30),
                       _buildInlineDetail(
-                          'Linea de evento', event.eventTrackName),
+                          'Linea de evento', widget.event.eventTrackName),
                       const SizedBox(height: 16),
-                      _buildInlineDetail('Lugar', event.location),
+                      _buildInlineDetail('Lugar', widget.event.location),
+                      const SizedBox(height: 16),
+                      _buildInlineDetail('Fecha',
+                          EventUseCases.formatDate(widget.event.initialDate)),
                       const SizedBox(height: 16),
                       _buildInlineDetail(
-                          'Fecha', EventUseCases.formatDate(event.initialDate)),
-                      const SizedBox(height: 16),
-                      _buildInlineDetail('Horario',
-                          _formatTimeRange(event.initialDate, event.finalDate)),
+                          'Horario',
+                          _formatTimeRange(widget.event.initialDate,
+                              widget.event.finalDate)),
                       const SizedBox(height: 16),
                       _buildInlineDetail(
                           'Capacidad',
-                          '${event.capacity} personas '
-                              '(${event.availableSeats} disponibles)'),
+                          '${widget.event.capacity} personas '
+                              '(${widget.event.availableSeats} disponibles)'),
                       const SizedBox(height: 16),
-                      if (event.speakers.isNotEmpty) ...[
+                      if (widget.event.speakers.isNotEmpty) ...[
                         const SizedBox(height: 8),
                         Text(
                           'Expositores:',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: colorPrincipal,
+                            color: widget.colorPrincipal,
                           ),
                         ),
                         const SizedBox(height: 8),
-                        ...event.speakers.map((speaker) => Padding(
+                        ...widget.event.speakers.map((speaker) => Padding(
                               padding: const EdgeInsets.only(bottom: 4),
                               child: Text(
                                 '• $speaker',
@@ -157,15 +214,97 @@ class EventDetailPage extends StatelessWidget {
                         const SizedBox(height: 24),
                       ],
                       Text(
-                        'Reviews',
+                        'Reseñas',
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
-                          color: colorPrincipal,
+                          color: widget.colorPrincipal,
                         ),
                       ),
                       const SizedBox(height: 16),
-                      if (event.feedbacks.isEmpty)
+
+                      // Formulario para agregar reviews - VERSIÓN ACTUALIZADA
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 8),
+
+                            // Selector de estrellas
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(5, (index) {
+                                return IconButton(
+                                  icon: Icon(
+                                    index < _selectedStars
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                    color: Colors.amber,
+                                    size: 30,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedStars = index + 1;
+                                    });
+                                  },
+                                );
+                              }),
+                            ),
+                            const SizedBox(height: 16),
+
+                            // Campo de comentario - AHORA MÁS COMPACTO
+                            TextFormField(
+                              controller: _commentController,
+                              decoration: InputDecoration(
+                                labelText: 'Comentario (opcional)',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 12.0,
+                                  horizontal: 16.0,
+                                ),
+                                isDense: true,
+                              ),
+                              maxLines: 2,
+                              minLines: 1,
+                            ),
+                            const SizedBox(height: 16),
+
+                            // Botón de enviar - CON BORDES REDONDEADOS
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _isSubmitting
+                                    ? null
+                                    : () => _submitFeedback(context),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: widget.colorPrincipal,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 15),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                ),
+                                child: _isSubmitting
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white)
+                                    : const Text(
+                                        'Enviar Review',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                          ],
+                        ),
+                      ),
+
+                      if (widget.event.feedbacks.isEmpty)
                         const Text(
                           'Aún no hay reviews para este evento',
                           style: TextStyle(
@@ -174,7 +313,7 @@ class EventDetailPage extends StatelessWidget {
                           ),
                         )
                       else
-                        ...event.feedbacks
+                        ...widget.event.feedbacks
                             .map((feedback) => _buildReviewItem(feedback))
                             .toList(),
                     ],
@@ -187,12 +326,12 @@ class EventDetailPage extends StatelessWidget {
             top: MediaQuery.of(context).padding.top + 10,
             right: 20,
             child: GestureDetector(
-              onTap: () => _closeWithTransition(context),
+              onTap: () => Navigator.of(context).pop(),
               child: Container(
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: colorPrincipal,
+                  color: widget.colorPrincipal,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
@@ -217,35 +356,6 @@ class EventDetailPage extends StatelessWidget {
     );
   }
 
-  void _closeWithTransition(BuildContext context) {
-    Navigator.of(context).pop();
-  }
-
-  // Método para navegar a esta página con la transición personalizada
-  static PageRouteBuilder<dynamic> buildRoute(Event event, Color color) {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => EventDetailPage(
-        event: event,
-        colorPrincipal: color,
-      ),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0.0, 1.0);
-        const end = Offset.zero;
-        const curve = Curves.easeInOut;
-
-        var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var offsetAnimation = animation.drive(tween);
-
-        return SlideTransition(
-          position: offsetAnimation,
-          child: child,
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 300),
-    );
-  }
-
   Widget _buildReviewItem(FeedbackbyUser feedback) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
@@ -255,10 +365,10 @@ class EventDetailPage extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-                backgroundColor: colorPrincipal.withOpacity(0.2),
+                backgroundColor: widget.colorPrincipal.withOpacity(0.2),
                 child: Icon(
                   Icons.person,
-                  color: colorPrincipal,
+                  color: widget.colorPrincipal,
                 ),
               ),
               const SizedBox(width: 12),
@@ -310,7 +420,7 @@ class EventDetailPage extends StatelessWidget {
             text: '$label: ',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: colorPrincipal,
+              color: widget.colorPrincipal,
             ),
           ),
           TextSpan(text: value),

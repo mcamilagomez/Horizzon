@@ -44,7 +44,7 @@ class Master {
             capacity: 500,
             availableSeats: 120,
             coverImageUrl: "https://example.com/tech-keynote.jpg",
-            cardImageUrl: "/images/cover.jpeg",
+            cardImageUrl: "assets/images/cover.jpeg",
             eventTrackName: "Conferencia de Tecnología 2023",
           ),
           Event(
@@ -61,7 +61,7 @@ class Master {
             capacity: 50,
             availableSeats: 5,
             coverImageUrl: "https://example.com/flutter-workshop.jpg",
-            cardImageUrl: "/images/cover.jpeg",
+            cardImageUrl: "assets/images/cover.jpeg",
             eventTrackName: "Conferencia de Tecnología 2023",
           ),
         ],

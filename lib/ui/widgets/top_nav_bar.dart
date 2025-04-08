@@ -14,14 +14,14 @@ class TopNavBar extends StatelessWidget {
     this.subtitle,
     this.baseColor = const Color(0xFF1976D2),
     this.shineIntensity = 0.15,
-    this.imagePath = 'images/logo.png',
+    this.imagePath = 'assets/images/logo.png',
     this.imageSize = 70.0,
   });
 
   @override
   Widget build(BuildContext context) {
     final shineColor = Colors.white.withOpacity(shineIntensity);
-    
+
     return Container(
       decoration: BoxDecoration(
         color: baseColor,
