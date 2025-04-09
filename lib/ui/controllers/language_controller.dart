@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class LanguageController extends GetxController {
   var locale = const Locale('es', 'ES').obs;
 
+  get getLocale => null;
+
   void changeLanguage(String langCode) {
     if (langCode == 'en') {
       locale.value = const Locale('en', 'US');

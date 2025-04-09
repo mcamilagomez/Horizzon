@@ -26,6 +26,13 @@ class Event {
     required this.coverImageUrl,
     required this.cardImageUrl,
   });
+
+  DateTime get startDate => initialDate;
+  DateTime get endDate => finalDate;
+
+  get startTime => null;
+
+  get endTime => null;
 }
 
 class Feedback {
