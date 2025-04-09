@@ -68,7 +68,7 @@
 ## 📹 Demo de la Aplicación
 
 🔽 *Aquí irá el video demostrativo de Horizzon*  
-**[📺 Ver video demo](# https://youtube.com/shorts/VqmzYHagCFc?feature=share)** (https://youtube.com/shorts/VqmzYHagCFc?feature=share)
+**[📺 Ver video demo](#)** (https://youtube.com/shorts/VqmzYHagCFc?feature=share)
 
 ---
 
