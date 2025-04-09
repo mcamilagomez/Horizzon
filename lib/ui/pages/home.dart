@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/event_track.dart';
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/user.dart';
 import 'package:provider/provider.dart';
+
 import '../controllers/event_controller.dart';
+import '../controllers/theme_controller.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import '../widgets/event_list.dart';
 import '../widgets/event_pills_list.dart';
 
-import 'dart:math'; // Importar para usar Random
+import 'dart:math'; // Import for Random
 
 class HomePage extends StatefulWidget {
   final Master master;
@@ -36,28 +39,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Event> _getRandomEvents(List<EventTrack> eventTracks, int count) {
-    // Obtener todos los eventos de todos los tracks en una sola lista
     final allEvents = eventTracks.expand((track) => track.events).toList();
-
-    // Mezclar la lista aleatoriamente
     allEvents.shuffle(Random());
-
-    // Tomar los primeros 'count' eventos (o menos si no hay suficientes)
     return allEvents.take(count).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = const Color.fromRGBO(18, 37, 98, 1);
+    final themeController = Get.find<ThemeController>();
+    final isDark = themeController.isDark.value;
+    final primaryColor = themeController.color.value;
+    final backgroundColor = isDark ? const Color(0xFF1B1B1D) : Colors.white;
+    final textColor = isDark ? Colors.white : primaryColor;
 
     return Scaffold(
       backgroundColor: primaryColor,
       body: Column(
         children: [
-          const TopNavBar(
-            mainTitle: "Horizzon",
-            subtitle: "'Un nuevo evento en el horizonte'",
-            baseColor: Color.fromRGBO(18, 37, 98, 1),
+          TopNavBar(
+            mainTitle: "app.title".tr,
+            subtitle: "home.subtitle".tr,
+            baseColor: primaryColor,
             shineIntensity: 0.6,
           ),
           Expanded(
@@ -67,25 +69,22 @@ class _HomePageState extends State<HomePage> {
                 topRight: Radius.circular(30.0),
               ),
               child: Container(
-                color: Colors.white,
+                color: backgroundColor,
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Sección de Recordatorios
                     Padding(
-                      padding:
-                          const EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                      padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
                       child: Text(
-                        'Recordatorios',
+                        'home.reminders'.tr,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: primaryColor,
+                          color: textColor,
                         ),
                       ),
                     ),
-                    // Widget que se actualiza con los cambios
                     Consumer<EventController>(
                       builder: (context, controller, _) {
                         return EventPillsList(
@@ -96,22 +95,20 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                     const SizedBox(height: 20),
-
-                    // Sección de Recomendados
                     Padding(
                       padding: const EdgeInsets.only(left: 20, bottom: 10),
                       child: Text(
-                        'Recomendados',
+                        'home.recommended'.tr,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: primaryColor,
+                          color: textColor,
                         ),
                       ),
                     ),
                     Expanded(
                       child: EventList(
-                        events: randomEvents, // Usar los eventos aleatorios
+                        events: randomEvents, // Using random events
                         primaryColor: primaryColor,
                         user: widget.user,
                       ),

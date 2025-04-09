@@ -1,73 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart'; // Asegúrate de tener esta importación
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'pages/home.dart';
-import 'pages/eventos.dart';
-import 'pages/agenda.dart';
-import 'pages/ajustes.dart';
-import '/ui/controllers/bottom_nav_controller.dart';
+import 'package:horizzon/ui/controllers/language_controller.dart';
+import 'package:horizzon/ui/controllers/theme_controller.dart';
+import 'package:horizzon/ui/controllers/bottom_nav_controller.dart';
+import 'package:horizzon/ui/pages/home.dart';
+import 'package:horizzon/ui/pages/eventos.dart';
+import 'package:horizzon/ui/pages/agenda.dart';
+import 'package:horizzon/ui/pages/ajustes.dart';
+import 'package:horizzon/ui/translations.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static const Color primaryColor = Color.fromRGBO(18, 37, 98, 1);
+  static const Color darkBackground = Color(0xFF1A1A2E);
+  static const Color darkCard = Color(0xFF2E3A59);
+
   @override
   Widget build(BuildContext context) {
-    // Crear las instancias que se compartirán
     final master = Master.createWithSampleData();
     final user = User(hash: "123456", myEvents: []);
 
-    // Registrar el controlador y las instancias
+    // Registrar los controladores
     Get.put(BottomNavController());
-    Get.put(master);
-    Get.put(user);
+    Get.put(LanguageController());
+    Get.put(ThemeController());
 
-    return GetMaterialApp(
-      title: 'Mi Aplicación',
-      debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.noTransition,
-      transitionDuration: Duration.zero,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        // Aplicar Josefin Sans a todo el TextTheme
-        textTheme: GoogleFonts.josefinSansTextTheme(
-          Theme.of(context).textTheme,
-        ),
-        // Personalización adicional para componentes específicos
-        appBarTheme: AppBarTheme(
-          titleTextStyle: GoogleFonts.josefinSans(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
+    return Obx(() {
+      final themeController = Get.find<ThemeController>();
+      final languageController = Get.find<LanguageController>();
+
+      return GetMaterialApp(
+        title: 'Mi Aplicación',
+        debugShowCheckedModeBanner: false,
+        defaultTransition: Transition.noTransition,
+        transitionDuration: Duration.zero,
+        themeMode: themeController.isDark.value ? ThemeMode.dark : ThemeMode.light,
+        theme: ThemeData(
+          brightness: Brightness.light,
+          primaryColor: primaryColor,
+          scaffoldBackgroundColor: Colors.white,
+          appBarTheme: AppBarTheme(
+            backgroundColor: primaryColor,
+            foregroundColor: Colors.white,
+          ),
+          iconTheme: const IconThemeData(color: primaryColor),
+          dividerColor: Colors.grey.shade300,
+          textTheme: GoogleFonts.josefinSansTextTheme(
+            Theme.of(context).textTheme,
           ),
         ),
-        buttonTheme: ButtonThemeData(
-          textTheme: ButtonTextTheme.primary,
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          primaryColor: primaryColor,
+          scaffoldBackgroundColor: darkBackground,
+          cardColor: darkCard,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: primaryColor,
+            foregroundColor: Colors.white,
+          ),
+          iconTheme: const IconThemeData(color: Colors.white),
+          dividerColor: Colors.grey.shade700,
         ),
-      ),
-      initialRoute: '/home',
-      getPages: [
-        GetPage(
-          name: '/home',
-          page: () => HomePage(master: master, user: user),
-          transition: Transition.noTransition,
-        ),
-        GetPage(
-          name: '/eventos',
-          page: () => EventosPage(user: user),
-          transition: Transition.noTransition,
-        ),
-        GetPage(
-          name: '/agenda',
-          page: () => AgendaPage(),
-          transition: Transition.noTransition,
-        ),
-        GetPage(
-          name: '/ajustes',
-          page: () => AjustesPage(),
-          transition: Transition.noTransition,
-        ),
-      ],
-    );
+        translations: AppTranslations(),
+        locale: languageController.locale.value,
+        fallbackLocale: const Locale('es', 'ES'),
+        initialRoute: '/home',
+        getPages: [
+          GetPage(name: '/home', page: () => HomePage(master: master, user: user)),
+          GetPage(name: '/eventos', page: () => EventosPage(user: user)),
+          GetPage(name: '/agenda', page: () => AgendaPage(user: user)),
+          GetPage(name: '/ajustes', page: () => AjustesPage()),
+        ],
+      );
+    });
   }
 }
