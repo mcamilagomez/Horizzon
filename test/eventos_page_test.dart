@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:horizzon/domain/entities/event.dart';
+
 import 'package:provider/provider.dart';
 import 'package:horizzon/ui/pages/eventos.dart';
 import 'package:horizzon/ui/controllers/event_controller.dart';
@@ -19,7 +19,8 @@ void main() {
   Widget createEventosPage() {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<EventController>.value(value: mockEventController),
+        ChangeNotifierProvider<EventController>.value(
+            value: mockEventController),
       ],
       child: MaterialApp(
         home: EventosPage(user: mockUser),
@@ -28,14 +29,16 @@ void main() {
   }
 
   group('EventosPage Widget Tests', () {
-    testWidgets('Debe mostrar el título principal correctamente', (WidgetTester tester) async {
+    testWidgets('Debe mostrar el título principal correctamente',
+        (WidgetTester tester) async {
       await tester.pumpWidget(createEventosPage());
       expect(find.text("Líneas de Eventos"), findsOneWidget);
       expect(find.text("Horizzon"), findsOneWidget);
       expect(find.text("Todos los eventos"), findsOneWidget);
     });
 
-    testWidgets('Debe mostrar las líneas de eventos', (WidgetTester tester) async {
+    testWidgets('Debe mostrar las líneas de eventos',
+        (WidgetTester tester) async {
       await tester.pumpWidget(createEventosPage());
       await tester.pumpAndSettle();
       final master = Master.createWithSampleData();
@@ -45,7 +48,8 @@ void main() {
       }
     });
 
-    testWidgets('Debe mostrar los primeros dos eventos de cada track', (WidgetTester tester) async {
+    testWidgets('Debe mostrar los primeros dos eventos de cada track',
+        (WidgetTester tester) async {
       await tester.pumpWidget(createEventosPage());
       await tester.pumpAndSettle();
       final master = Master.createWithSampleData();
@@ -62,18 +66,21 @@ void main() {
       }
     });
 
-    testWidgets('Debe expandir y contraer eventos al hacer clic en el botón mostrar más/menos',
+    testWidgets(
+        'Debe expandir y contraer eventos al hacer clic en el botón mostrar más/menos',
         (WidgetTester tester) async {
       await tester.pumpWidget(createEventosPage());
       await tester.pumpAndSettle();
       final master = Master.createWithSampleData();
-      final trackWithManyEvents = master.eventTracks
-          .firstWhere((track) => track.events.length > 2, orElse: () => master.eventTracks.first);
+      final trackWithManyEvents = master.eventTracks.firstWhere(
+          (track) => track.events.length > 2,
+          orElse: () => master.eventTracks.first);
 
       if (trackWithManyEvents.events.length <= 2) return;
 
       expect(find.text(trackWithManyEvents.events[2].name), findsNothing);
-      final mostrarMasTextFinder = find.text("Mostrar más (${trackWithManyEvents.events.length - 2})");
+      final mostrarMasTextFinder =
+          find.text("Mostrar más (${trackWithManyEvents.events.length - 2})");
       expect(mostrarMasTextFinder, findsWidgets);
       await tester.tap(mostrarMasTextFinder.first);
       await tester.pumpAndSettle();
@@ -95,13 +102,13 @@ void main() {
       expect(find.widgetWithText(ElevatedButton, 'Suscribirse'), findsWidgets);
     });
 
-    testWidgets('Debe intentar navegar al hacer tap en un evento', (WidgetTester tester) async {
+    testWidgets('Debe intentar navegar al hacer tap en un evento',
+        (WidgetTester tester) async {
       await tester.pumpWidget(createEventosPage());
-      await tester.pump(); // Usa pump en lugar de pumpAndSettle para evitar renderizado completo
+      await tester
+          .pump(); // Usa pump en lugar de pumpAndSettle para evitar renderizado completo
 
       // Obtener un evento de ejemplo
-      final master = Master.createWithSampleData();
-      final firstEvent = master.eventTracks.first.events.first;
 
       // Buscar el widget tappable (InkWell) sin depender demasiado del texto
       final eventCardFinder = find.byType(InkWell).first;

@@ -8,6 +8,7 @@ import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
+import 'package:horizzon/ui/app/event_detail_page.dart';
 
 class AgendaPage extends StatefulWidget {
   final User user;
@@ -31,7 +32,6 @@ class _AgendaPageState extends State<AgendaPage> {
   }
 
   List<Map<String, dynamic>> _getDaysInMonth() {
-    final firstDay = DateTime(_currentDate.year, _currentDate.month, 1);
     final lastDay = DateTime(_currentDate.year, _currentDate.month + 1, 0);
     final today = DateTime.now();
 
@@ -64,7 +64,8 @@ class _AgendaPageState extends State<AgendaPage> {
   bool _isEventOnDate(Event event, DateTime date) {
     if (_isSameDay(event.initialDate, date)) return true;
     if (_isSameDay(event.initialDate, event.finalDate)) return false;
-    return (date.isAfter(event.initialDate) && date.isBefore(event.finalDate)) ||
+    return (date.isAfter(event.initialDate) &&
+            date.isBefore(event.finalDate)) ||
         _isSameDay(event.finalDate, date);
   }
 
@@ -81,12 +82,15 @@ class _AgendaPageState extends State<AgendaPage> {
 
   double _calculateAverageRating(List<FeedbackbyUser> feedbacks) {
     if (feedbacks.isEmpty) return 0;
-    return feedbacks.map((f) => f.stars).reduce((a, b) => a + b) / feedbacks.length;
+    return feedbacks.map((f) => f.stars).reduce((a, b) => a + b) /
+        feedbacks.length;
   }
 
   Widget _buildEventCard(Event event) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final themeController = Get.find<ThemeController>();
+    final primaryColor = themeController.color.value;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -96,7 +100,15 @@ class _AgendaPageState extends State<AgendaPage> {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
-          // Detalles del evento
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => EventDetailPage(
+                event: event,
+                colorPrincipal: primaryColor,
+                user: widget.user,
+              ),
+            ),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -144,7 +156,9 @@ class _AgendaPageState extends State<AgendaPage> {
                           padding: const EdgeInsets.only(top: 8),
                           child: Row(
                             children: [
-                              Icon(Icons.access_time, size: 16, color: theme.textTheme.bodySmall?.color),
+                              Icon(Icons.access_time,
+                                  size: 16,
+                                  color: theme.textTheme.bodySmall?.color),
                               const SizedBox(width: 4),
                               Text(
                                 '${DateFormat('HH:mm').format(event.initialDate)} - ${DateFormat('HH:mm').format(event.finalDate)}',
@@ -157,9 +171,12 @@ class _AgendaPageState extends State<AgendaPage> {
                           padding: const EdgeInsets.only(top: 4),
                           child: Row(
                             children: [
-                              Icon(Icons.location_on, size: 16, color: theme.textTheme.bodySmall?.color),
+                              Icon(Icons.location_on,
+                                  size: 16,
+                                  color: theme.textTheme.bodySmall?.color),
                               const SizedBox(width: 4),
-                              Text(event.location, style: theme.textTheme.bodyMedium),
+                              Text(event.location,
+                                  style: theme.textTheme.bodyMedium),
                             ],
                           ),
                         ),
@@ -172,32 +189,37 @@ class _AgendaPageState extends State<AgendaPage> {
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 4,
-                  children: event.speakers.map((speaker) => Chip(
-                    label: Text(speaker),
-                    backgroundColor: isDark 
-                      ? theme.colorScheme.surfaceVariant 
-                      : theme.colorScheme.primary.withOpacity(0.1),
-                    labelStyle: theme.textTheme.labelSmall?.copyWith(
-                      color: isDark 
-                        ? theme.colorScheme.onSurfaceVariant 
-                        : theme.colorScheme.primary,
-                    ),
-                  )).toList(),
+                  children: event.speakers
+                      .map((speaker) => Chip(
+                            label: Text(speaker),
+                            backgroundColor: isDark
+                                ? theme.colorScheme.surfaceVariant
+                                : theme.colorScheme.primary.withOpacity(0.1),
+                            labelStyle: theme.textTheme.labelSmall?.copyWith(
+                              color: isDark
+                                  ? theme.colorScheme.onSurfaceVariant
+                                  : theme.colorScheme.primary,
+                            ),
+                          ))
+                      .toList(),
                 ),
               ],
               if (event.feedbacks.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    ...List.generate(5, (index) => Icon(
-                      index < _calculateAverageRating(event.feedbacks) 
-                        ? Icons.star 
-                        : Icons.star_border,
-                      size: 16,
-                      color: Colors.amber,
-                    )),
+                    ...List.generate(
+                        5,
+                        (index) => Icon(
+                              index < _calculateAverageRating(event.feedbacks)
+                                  ? Icons.star
+                                  : Icons.star_border,
+                              size: 16,
+                              color: Colors.amber,
+                            )),
                     const SizedBox(width: 4),
-                    Text('(${event.feedbacks.length})', style: theme.textTheme.bodySmall),
+                    Text('(${event.feedbacks.length})',
+                        style: theme.textTheme.bodySmall),
                   ],
                 ),
               ],
@@ -214,8 +236,11 @@ class _AgendaPageState extends State<AgendaPage> {
     final isDark = themeController.isDark.value;
     final theme = Theme.of(context);
     final primary = themeController.color.value;
-    final backgroundColor = isDark ? theme.colorScheme.background : Colors.white;
-    final currentMonthYear = DateFormat('MMMM y', Get.locale?.languageCode ?? 'es').format(_currentDate);
+    final backgroundColor =
+        isDark ? theme.colorScheme.background : Colors.white;
+    final currentMonthYear =
+        DateFormat('MMMM y', Get.locale?.languageCode ?? 'es')
+            .format(_currentDate);
     final daysInMonth = _getDaysInMonth();
 
     return Scaffold(
@@ -239,7 +264,8 @@ class _AgendaPageState extends State<AgendaPage> {
                 child: Consumer<EventController>(
                   builder: (context, controller, child) {
                     final userEvents = controller.user.myEvents;
-                    final selectedEvents = _getEventsForSelectedDate(userEvents);
+                    final selectedEvents =
+                        _getEventsForSelectedDate(userEvents);
 
                     return SingleChildScrollView(
                       child: Padding(
@@ -259,7 +285,8 @@ class _AgendaPageState extends State<AgendaPage> {
                                     ),
                                     Text(
                                       currentMonthYear,
-                                      style: theme.textTheme.titleMedium?.copyWith(
+                                      style:
+                                          theme.textTheme.titleMedium?.copyWith(
                                         color: theme.colorScheme.onPrimary,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -285,7 +312,8 @@ class _AgendaPageState extends State<AgendaPage> {
                                       onPressed: () {
                                         _daysScrollController.animateTo(
                                           _daysScrollController.offset - 100,
-                                          duration: const Duration(milliseconds: 300),
+                                          duration:
+                                              const Duration(milliseconds: 300),
                                           curve: Curves.easeInOut,
                                         );
                                       },
@@ -293,7 +321,8 @@ class _AgendaPageState extends State<AgendaPage> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 40),
                                     child: ListView.builder(
                                       controller: _daysScrollController,
                                       scrollDirection: Axis.horizontal,
@@ -302,51 +331,77 @@ class _AgendaPageState extends State<AgendaPage> {
                                         final day = daysInMonth[index];
                                         final date = day['date'] as DateTime;
                                         final isToday = day['isToday'];
-                                        final isSelected = _selectedDate != null && _isSameDay(_selectedDate!, date);
-                                        final isWeekend = day['weekday'] == 'Sat' || day['weekday'] == 'Sun';
-                                        final hasEvents = _hasEvents(userEvents, date);
+                                        final isSelected = _selectedDate !=
+                                                null &&
+                                            _isSameDay(_selectedDate!, date);
+                                        final isWeekend =
+                                            day['weekday'] == 'Sat' ||
+                                                day['weekday'] == 'Sun';
+                                        final hasEvents =
+                                            _hasEvents(userEvents, date);
 
                                         return GestureDetector(
                                           onTap: () => _onDaySelected(date),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4.0),
                                             child: Container(
                                               width: 60,
                                               decoration: BoxDecoration(
                                                 color: isSelected
-                                                    ? theme.colorScheme.primaryContainer
+                                                    ? theme.colorScheme
+                                                        .primaryContainer
                                                     : isToday
-                                                        ? theme.colorScheme.secondaryContainer
+                                                        ? theme.colorScheme
+                                                            .secondaryContainer
                                                         : isWeekend
-                                                            ? theme.colorScheme.surfaceVariant
-                                                            : theme.colorScheme.surface,
-                                                borderRadius: BorderRadius.circular(8),
+                                                            ? theme.colorScheme
+                                                                .surfaceVariant
+                                                            : theme.colorScheme
+                                                                .surface,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 border: Border.all(
                                                   color: isSelected
-                                                      ? theme.colorScheme.primary
+                                                      ? theme
+                                                          .colorScheme.primary
                                                       : isToday
-                                                          ? theme.colorScheme.secondary
-                                                          : theme.colorScheme.outlineVariant,
-                                                  width: isSelected || isToday ? 2 : 1,
+                                                          ? theme.colorScheme
+                                                              .secondary
+                                                          : theme.colorScheme
+                                                              .outlineVariant,
+                                                  width: isSelected || isToday
+                                                      ? 2
+                                                      : 1,
                                                 ),
                                               ),
                                               child: Stack(
                                                 children: [
                                                   Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Text(
                                                         day['day'],
-                                                        style: theme.textTheme.titleMedium?.copyWith(
-                                                          fontWeight: FontWeight.bold,
-                                                          color: isToday 
-                                                              ? theme.colorScheme.error 
-                                                              : theme.colorScheme.primary,
+                                                        style: theme.textTheme
+                                                            .titleMedium
+                                                            ?.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: isToday
+                                                              ? theme
+                                                                  .colorScheme
+                                                                  .error
+                                                              : theme
+                                                                  .colorScheme
+                                                                  .primary,
                                                         ),
                                                       ),
                                                       Text(
                                                         day['weekday'],
-                                                        style: theme.textTheme.bodySmall,
+                                                        style: theme.textTheme
+                                                            .bodySmall,
                                                       ),
                                                     ],
                                                   ),
@@ -357,9 +412,13 @@ class _AgendaPageState extends State<AgendaPage> {
                                                       child: Container(
                                                         width: 8,
                                                         height: 8,
-                                                        decoration: BoxDecoration(
-                                                          color: theme.colorScheme.primary,
-                                                          shape: BoxShape.circle,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: theme
+                                                              .colorScheme
+                                                              .primary,
+                                                          shape:
+                                                              BoxShape.circle,
                                                         ),
                                                       ),
                                                     ),
@@ -378,7 +437,8 @@ class _AgendaPageState extends State<AgendaPage> {
                                       onPressed: () {
                                         _daysScrollController.animateTo(
                                           _daysScrollController.offset + 100,
-                                          duration: const Duration(milliseconds: 300),
+                                          duration:
+                                              const Duration(milliseconds: 300),
                                           curve: Curves.easeInOut,
                                         );
                                       },
@@ -389,22 +449,29 @@ class _AgendaPageState extends State<AgendaPage> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            if (_selectedDate != null && selectedEvents.isNotEmpty)
+                            if (_selectedDate != null &&
+                                selectedEvents.isNotEmpty)
                               Column(
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 16),
                                     child: Text(
                                       'calendar.eventsFor'.trParams({
-                                        'date': DateFormat('EEEE, d MMMM', Get.locale?.languageCode ?? 'es').format(_selectedDate!)
+                                        'date': DateFormat(
+                                                'EEEE, d MMMM',
+                                                Get.locale?.languageCode ??
+                                                    'es')
+                                            .format(_selectedDate!)
                                       }),
-                                      style: theme.textTheme.titleMedium?.copyWith(
+                                      style:
+                                          theme.textTheme.titleMedium?.copyWith(
                                         fontWeight: FontWeight.bold,
                                         color: theme.colorScheme.primary,
                                       ),
                                     ),
                                   ),
-                                  ...selectedEvents.map((event) => _buildEventCard(event)),
+                                  ...selectedEvents
+                                      .map((event) => _buildEventCard(event)),
                                 ],
                               )
                             else if (_selectedDate != null)
@@ -413,7 +480,8 @@ class _AgendaPageState extends State<AgendaPage> {
                                 child: Text(
                                   'calendar.noEvents'.tr,
                                   style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                                    color: theme.colorScheme.onSurface
+                                        .withOpacity(0.6),
                                   ),
                                 ),
                               )
@@ -425,12 +493,14 @@ class _AgendaPageState extends State<AgendaPage> {
                                     padding: const EdgeInsets.only(bottom: 16),
                                     child: Text(
                                       'calendar.allEvents'.tr,
-                                      style: theme.textTheme.titleMedium?.copyWith(
+                                      style:
+                                          theme.textTheme.titleMedium?.copyWith(
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                  ...userEvents.map((event) => _buildEventCard(event)),
+                                  ...userEvents
+                                      .map((event) => _buildEventCard(event)),
                                 ],
                               ),
                           ],

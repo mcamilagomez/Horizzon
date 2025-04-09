@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
 import 'package:horizzon/ui/widgets/event_pills_list.dart';
-import 'package:horizzon/ui/widgets/event_pill.dart';
 
 void main() {
   late User mockUser;
@@ -65,19 +64,19 @@ void main() {
   }
 
   group('EventPillsList Widget Tests', () {
-    testWidgets('Debe mostrar mensaje cuando la lista de eventos está vacía', (WidgetTester tester) async {
+    testWidgets('Debe mostrar mensaje cuando la lista de eventos está vacía',
+        (WidgetTester tester) async {
       await tester.pumpWidget(createEventPillsList(events: []));
       await tester.pump();
 
       expect(find.text('No tienes recordatorios aún'), findsOneWidget);
-      final textWidget = tester.widget<Text>(find.text('No tienes recordatorios aún'));
+      final textWidget =
+          tester.widget<Text>(find.text('No tienes recordatorios aún'));
       expect(textWidget.style?.color, Colors.grey);
 
       final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
       expect(sizedBox.height, 50);
       expect(find.byType(ListView), findsNothing);
     });
-
-
   });
 }
