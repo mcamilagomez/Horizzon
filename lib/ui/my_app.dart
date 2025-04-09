@@ -1,6 +1,6 @@
-// ui/my_app.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart'; // Asegúrate de tener esta importación
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/user.dart';
 import 'pages/home.dart';
@@ -30,6 +30,20 @@ class MyApp extends StatelessWidget {
       transitionDuration: Duration.zero,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        // Aplicar Josefin Sans a todo el TextTheme
+        textTheme: GoogleFonts.josefinSansTextTheme(
+          Theme.of(context).textTheme,
+        ),
+        // Personalización adicional para componentes específicos
+        appBarTheme: AppBarTheme(
+          titleTextStyle: GoogleFonts.josefinSans(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        buttonTheme: ButtonThemeData(
+          textTheme: ButtonTextTheme.primary,
+        ),
       ),
       initialRoute: '/home',
       getPages: [
