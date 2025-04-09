@@ -80,7 +80,9 @@ class MyApp extends StatelessWidget {
     final user = User(hash: "123456", myEvents: []);
 
     // Registra los controladores
+    // Registra los controladores
     Get.put(BottomNavController());
+    Get.put(LanguageController());
     Get.put(LanguageController());
     Get.put(master);
     Get.put(user);

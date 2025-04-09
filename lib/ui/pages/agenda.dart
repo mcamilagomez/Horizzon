@@ -210,52 +210,24 @@ class _AgendaPageState extends State<AgendaPage> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< Updated upstream
-    final primaryColor = Theme.of(context).primaryColor;
-    final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
-    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
-
-    return Scaffold(
-      backgroundColor: primaryColor,
-      body: Column(
-        children: [
-          TopNavBar(
-            mainTitle: "Mi Calendario",
-    final currentMonthYear = DateFormat('MMMM y').format(_currentDate);
-=======
     final themeController = Get.put(ThemeController());
     final isDark = themeController.isDark.value;
     final theme = Theme.of(context);
     final primary = themeController.color.value;
     final backgroundColor = isDark ? theme.colorScheme.background : Colors.white;
     final currentMonthYear = DateFormat('MMMM y', Get.locale?.languageCode ?? 'es').format(_currentDate);
->>>>>>> Stashed changes
     final daysInMonth = _getDaysInMonth();
 
     return Scaffold(
       backgroundColor: primary,
       body: Column(
         children: [
-<<<<<<< Updated upstream
-          // TopNavBar fijo en la parte superior
-          const TopNavBar(
-            mainTitle: "Agenda",
-            subtitle: "Horizzon",
-            baseColor: primaryColor,
-            shineIntensity: 0.6,
-          ),
-
-          
-          // Contenido desplazable
-
-=======
           TopNavBar(
             mainTitle: 'calendar.title'.tr,
             subtitle: 'calendar.subtitle'.tr,
             baseColor: primary,
             shineIntensity: 0.6,
           ),
->>>>>>> Stashed changes
           Expanded(
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
@@ -264,53 +236,10 @@ class _AgendaPageState extends State<AgendaPage> {
               ),
               child: Container(
                 color: backgroundColor,
-<<<<<<< Updated upstream
-                width: double.infinity,
-                child: Center(
-                  child: Text(
-                    'Contenido Home',
-                    style: TextStyle(fontSize: 16, color: textColor),
-                color: Colors.white,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        // Selector de mes
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.chevron_left),
-                                  onPressed: () => _changeMonth(-1),
-                                  color: _primaryColor,
-                                ),
-                                Text(
-                                  currentMonthYear,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: _primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.chevron_right),
-                                  onPressed: () => _changeMonth(1),
-                                  color: _primaryColor,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-=======
                 child: Consumer<EventController>(
                   builder: (context, controller, child) {
                     final userEvents = controller.user.myEvents;
                     final selectedEvents = _getEventsForSelectedDate(userEvents);
->>>>>>> Stashed changes
 
                     return SingleChildScrollView(
                       child: Padding(

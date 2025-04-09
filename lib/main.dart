@@ -17,13 +17,21 @@ import 'package:provider/provider.dart';
 import 'package:horizzon/domain/entities/user.dart';
 import 'package:horizzon/ui/controllers/event_controller.dart';
 import 'package:horizzon/ui/controllers/theme_controller.dart';
+import 'package:horizzon/ui/controllers/theme_controller.dart';
 import 'package:horizzon/ui/my_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('es', null); // Formato de fecha en español
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('es', null); // Formato de fecha en español
+
   final user = User(hash: "123456", myEvents: []);
+  
+  Get.put(ThemeController()); // Tema dinámico
+  Get.put(LanguageController()); // ✅ Añade esto para manejar el idioma
   
   Get.put(ThemeController()); // Tema dinámico
   Get.put(LanguageController()); // ✅ Añade esto para manejar el idioma

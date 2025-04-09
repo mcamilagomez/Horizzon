@@ -15,8 +15,6 @@ class ThemeController extends GetxController {
     isDark.value = !isDark.value;
     _updateTheme();
   }
-<<<<<<< Updated upstream
-=======
 
   void changeColor(Color newColor) {
     color.value = newColor;
@@ -41,5 +39,4 @@ class ThemeController extends GetxController {
 
     Get.changeTheme(newTheme);
   }
->>>>>>> Stashed changes
 }

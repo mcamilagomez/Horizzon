@@ -1,52 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-<<<<<<< Updated upstream
-=======
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/user.dart';
 import 'package:provider/provider.dart';
 
 import '../controllers/event_controller.dart';
 import '../controllers/theme_controller.dart';
->>>>>>> Stashed changes
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
+import '../widgets/event_list.dart';
+import '../widgets/event_pills_list.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends StatefulWidget {
+  final Master master;
+  final User user;
 
-  static const Color primaryColor = Color.fromRGBO(18, 37, 98, 1);
+  const HomePage({
+    super.key,
+    required this.master,
+    required this.user,
+  });
 
   @override
-<<<<<<< Updated upstream
-  Widget build(BuildContext context) {
-    final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
-    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
-
-    return Scaffold(
-      backgroundColor: primaryColor,
-      body: Column(
-        children: [
-          const TopNavBar(
-            mainTitle: "Horizzon",
-            subtitle: "'Un nuevo evento en el horizonte'",
-            baseColor: primaryColor,
-            shineIntensity: 0.6,
-          ),
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
-              ),
-              child: Container(
-                color: backgroundColor,
-                width: double.infinity,
-                child: Center(
-                  child: Text(
-                    'Contenido Home',
-                    style: TextStyle(color: textColor, fontSize: 18),
-=======
   State<HomePage> createState() => _HomePageState();
 }
 
@@ -128,7 +103,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ],
->>>>>>> Stashed changes
                   ),
                 ),
               ),
