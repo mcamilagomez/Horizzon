@@ -14,8 +14,8 @@ class BottomNavBar extends StatelessWidget {
       onTap: controller.changePage,
       type: BottomNavigationBarType.fixed,
       backgroundColor: Colors.white,
-      selectedItemColor: Colors.blue[900],
-      unselectedItemColor: Colors.blue[900],
+      selectedItemColor: const Color.fromARGB(255, 215, 236, 255), // Azul claro
+      unselectedItemColor: const Color.fromARGB(255, 59, 89, 133),
       showSelectedLabels: false,
       showUnselectedLabels: false,
       iconSize: 24,

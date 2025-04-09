@@ -12,7 +12,7 @@ class TopNavBar extends StatelessWidget {
     super.key,
     required this.mainTitle,
     this.subtitle,
-    this.baseColor = const Color(0xFF1976D2),
+    this.baseColor = const Color.fromARGB(255, 63, 181, 255),
     this.shineIntensity = 0.15,
     this.imagePath = 'assets/images/logo.png',
     this.imageSize = 70.0,
