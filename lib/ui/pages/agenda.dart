@@ -19,7 +19,7 @@ class AgendaPage extends StatefulWidget {
   State<AgendaPage> createState() => _AgendaPageState();
 }
 
-class _AgendaPageState extends State<AgendaPage> {
+class _AgendaPageState extends State<AgendaPage> { 
   DateTime _currentDate = DateTime.now();
   DateTime? _selectedDate;
   final ScrollController _daysScrollController = ScrollController();
@@ -65,8 +65,8 @@ class _AgendaPageState extends State<AgendaPage> {
     if (_isSameDay(event.initialDate, date)) return true;
     if (_isSameDay(event.initialDate, event.finalDate)) return false;
     return (date.isAfter(event.initialDate) &&
-            date.isBefore(event.finalDate)) ||
-        _isSameDay(event.finalDate, date);
+            date.isBefore(event.finalDate) ||
+        _isSameDay(event.finalDate, date));
   }
 
   List<Event> _getEventsForSelectedDate(List<Event> userEvents) {
@@ -84,6 +84,99 @@ class _AgendaPageState extends State<AgendaPage> {
     if (feedbacks.isEmpty) return 0;
     return feedbacks.map((f) => f.stars).reduce((a, b) => a + b) /
         feedbacks.length;
+  }
+
+  Widget _buildDayContainer(Map<String, dynamic> day, ThemeData theme, List<Event> userEvents) {
+    final date = day['date'] as DateTime;
+    final isToday = day['isToday'];
+    final isSelected = _selectedDate != null && _isSameDay(_selectedDate!, date);
+    final isWeekend = day['weekday'] == 'Sat' || day['weekday'] == 'Sun';
+    final hasEvents = _hasEvents(userEvents, date);
+    final isCurrentMonth = date.month == _currentDate.month;
+
+    return GestureDetector(
+      onTap: () => _onDaySelected(date),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: Container(
+          width: 60,
+          decoration: BoxDecoration(
+            color: isSelected
+                ? theme.colorScheme.primary.withOpacity(0.2)
+                : isToday
+                    ? theme.colorScheme.secondary.withOpacity(0.1)
+                    : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected
+                  ? theme.colorScheme.primary
+                  : isToday
+                      ? theme.colorScheme.secondary
+                      : Colors.transparent,
+              width: 2,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                day['weekday'],
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: isCurrentMonth
+                      ? isWeekend
+                          ? theme.colorScheme.error
+                          : theme.colorScheme.onSurface.withOpacity(0.8)
+                      : theme.colorScheme.onSurface.withOpacity(0.3),
+                  fontWeight: isWeekend ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? theme.colorScheme.primary
+                      : isToday
+                          ? theme.colorScheme.secondary
+                          : Colors.transparent,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    day['day'],
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: isSelected
+                          ? theme.colorScheme.onPrimary
+                          : isToday
+                              ? theme.colorScheme.onSecondary
+                              : isCurrentMonth
+                                  ? theme.colorScheme.onSurface
+                                  : theme.colorScheme.onSurface.withOpacity(0.3),
+                    ),
+                  ),
+                ),
+              ),
+              if (hasEvents)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? theme.colorScheme.onPrimary
+                          : theme.colorScheme.primary,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildEventCard(Event event) {
@@ -285,8 +378,7 @@ class _AgendaPageState extends State<AgendaPage> {
                                     ),
                                     Text(
                                       currentMonthYear,
-                                      style:
-                                          theme.textTheme.titleMedium?.copyWith(
+                                      style: theme.textTheme.titleLarge?.copyWith(
                                         color: theme.colorScheme.onPrimary,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -302,7 +394,7 @@ class _AgendaPageState extends State<AgendaPage> {
                             ),
                             const SizedBox(height: 20),
                             SizedBox(
-                              height: 90,
+                              height: 100,
                               child: Stack(
                                 children: [
                                   Align(
@@ -329,104 +421,8 @@ class _AgendaPageState extends State<AgendaPage> {
                                       itemCount: daysInMonth.length,
                                       itemBuilder: (context, index) {
                                         final day = daysInMonth[index];
-                                        final date = day['date'] as DateTime;
-                                        final isToday = day['isToday'];
-                                        final isSelected = _selectedDate !=
-                                                null &&
-                                            _isSameDay(_selectedDate!, date);
-                                        final isWeekend =
-                                            day['weekday'] == 'Sat' ||
-                                                day['weekday'] == 'Sun';
-                                        final hasEvents =
-                                            _hasEvents(userEvents, date);
-
-                                        return GestureDetector(
-                                          onTap: () => _onDaySelected(date),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 4.0),
-                                            child: Container(
-                                              width: 60,
-                                              decoration: BoxDecoration(
-                                                color: isSelected
-                                                    ? theme.colorScheme
-                                                        .primaryContainer
-                                                    : isToday
-                                                        ? theme.colorScheme
-                                                            .secondaryContainer
-                                                        : isWeekend
-                                                            ? theme.colorScheme
-                                                                .surfaceVariant
-                                                            : theme.colorScheme
-                                                                .surface,
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                border: Border.all(
-                                                  color: isSelected
-                                                      ? theme
-                                                          .colorScheme.primary
-                                                      : isToday
-                                                          ? theme.colorScheme
-                                                              .secondary
-                                                          : theme.colorScheme
-                                                              .outlineVariant,
-                                                  width: isSelected || isToday
-                                                      ? 2
-                                                      : 1,
-                                                ),
-                                              ),
-                                              child: Stack(
-                                                children: [
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        day['day'],
-                                                        style: theme.textTheme
-                                                            .titleMedium
-                                                            ?.copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: isToday
-                                                              ? theme
-                                                                  .colorScheme
-                                                                  .error
-                                                              : theme
-                                                                  .colorScheme
-                                                                  .primary,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        day['weekday'],
-                                                        style: theme.textTheme
-                                                            .bodySmall,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  if (hasEvents)
-                                                    Positioned(
-                                                      top: 4,
-                                                      right: 4,
-                                                      child: Container(
-                                                        width: 8,
-                                                        height: 8,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: theme
-                                                              .colorScheme
-                                                              .primary,
-                                                          shape:
-                                                              BoxShape.circle,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
+                                        return _buildDayContainer(
+                                            day, theme, userEvents);
                                       },
                                     ),
                                   ),
