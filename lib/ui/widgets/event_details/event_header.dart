@@ -1,91 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:horizzon/domain/use_case/use_case.dart';
-import 'package:horizzon/ui/pages/event_detail_page.dart';
+import 'package:provider/provider.dart';
 import 'package:horizzon/ui/controllers/event_controller.dart';
+import 'package:horizzon/domain/use_case/use_case.dart';
 
-class EventCard extends StatelessWidget {
+class EventHeader extends StatelessWidget {
   final Event event;
-  final Color primaryColor;
-  final bool isDark;
   final User user;
+  final Color color;
 
-  const EventCard({
+  const EventHeader({
     super.key,
     required this.event,
-    required this.primaryColor,
-    required this.isDark,
     required this.user,
+    required this.color,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EventDetailPage(
-              event: event,
-              colorPrincipal: primaryColor,
-              user: user,
-            ),
-          ),
-        );
-      },
+    return SliverToBoxAdapter(
       child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF3A3A3C) : Colors.grey[50],
-          borderRadius: BorderRadius.circular(8),
-          border:
-              Border.all(color: isDark ? Colors.white10 : Colors.grey[200]!),
+          color: color,
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(8),
+            bottomRight: Radius.circular(8),
+          ),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  image: AssetImage(event.coverImageUrl),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
+            // Nombre y descripción del evento
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     event.name,
-                    style: TextStyle(
-                      fontSize: 16,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : Colors.black,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
                   Text(
                     event.description,
-                    style: TextStyle(
+                    style: const TextStyle(
+                      color: Colors.white,
                       fontSize: 12,
-                      color: isDark ? Colors.grey[300] : Colors.grey[600],
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
             const SizedBox(width: 8),
+            // Botón de suscripción
             Consumer<EventController>(
               builder: (context, controller, _) {
                 final isSubscribed = controller.checkSubscriptionStatus(event);
@@ -111,24 +82,23 @@ class EventCard extends StatelessWidget {
                 }
 
                 return SizedBox(
-                  height: 32,
-                  width: 100,
+                  height: 30,
                   child: ElevatedButton(
                     onPressed: isButtonEnabled
                         ? () => controller.toggleSuscripcion(event)
                         : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: buttonColor,
                       padding: const EdgeInsets.symmetric(horizontal: 8),
+                      backgroundColor: buttonColor,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     child: Text(
                       buttonText,
                       style: const TextStyle(
-                        fontSize: 12,
                         color: Colors.white,
+                        fontSize: 12,
                       ),
                     ),
                   ),
