@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import '../controllers/event_controller.dart';
 
-class EventCard extends StatelessWidget {
+class EventCard extends StatelessWidget { 
   final Event event;
   final Color colorPrincipal;
   final User user;
