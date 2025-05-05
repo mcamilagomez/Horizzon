@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:horizzon/ui/widgets/event_pill.dart';
-import 'package:horizzon/ui/widgets/event_pills_list.dart';
+import 'package:horizzon/ui/widgets/reminders/event_pill.dart';
+import 'package:horizzon/ui/widgets/reminders/event_pills_list.dart';
 import 'package:mocktail/mocktail.dart';
 
 void main() {
@@ -35,7 +35,8 @@ void main() {
   }
 
   group('EventPillsList Widget Tests', () {
-    testWidgets('should render empty state when no events', (WidgetTester tester) async {
+    testWidgets('should render empty state when no events',
+        (WidgetTester tester) async {
       // Arrange
       await tester.pumpWidget(
         MaterialApp(
@@ -55,7 +56,8 @@ void main() {
       expect(find.byType(EventPill), findsNothing);
     });
 
-    testWidgets('should render list of EventPills when events are provided', (WidgetTester tester) async {
+    testWidgets('should render list of EventPills when events are provided',
+        (WidgetTester tester) async {
       // Arrange
       final events = [
         createMockEvent(id: 1, name: 'Event 1'),
@@ -80,7 +82,8 @@ void main() {
       expect(find.byType(EventPill), findsNWidgets(events.length));
     });
 
-    testWidgets('should have correct padding and dimensions', (WidgetTester tester) async {
+    testWidgets('should have correct padding and dimensions',
+        (WidgetTester tester) async {
       // Arrange
       final events = [createMockEvent(id: 1, name: 'Event 1')];
 

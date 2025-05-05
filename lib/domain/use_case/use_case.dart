@@ -1,6 +1,57 @@
+//Acá coloco las funciones finales, es decir esto es lo que va a hablar con la UI
+// puedo consumir data/repositories y hacer otras funciones por acá
 // lib/domain/use_case/use_case.dart
+
+//Esto es lo viejo de use case
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:horizzon/domain/entities/master.dart';
+import 'package:horizzon/domain/entities/user.dart';
+import 'package:horizzon/domain/repositories/master_repository.dart';
+import 'package:horizzon/domain/repositories/user_repository.dart';
+
+class AppInitializationUseCase {
+  final MasterRepository masterRepository;
+  final UserRepository userRepository;
+
+  Master? _cachedMaster;
+  User? _cachedUser;
+
+  AppInitializationUseCase({
+    required this.masterRepository,
+    required this.userRepository,
+  });
+
+  Future<void> initializeApp() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isFirstRun = prefs.getBool('isFirstRun') ?? true;
+
+    if (isFirstRun) {
+      // 🔁 Fetch y guardar master
+      await masterRepository.fetchAndCacheMasterData();
+      _cachedMaster = await masterRepository.getMasterFromCache();
+
+      // 🔐 Crear y guardar usuario
+      _cachedUser = await userRepository.createUserWithHash();
+
+      // 🚩 Marcar que ya no es la primera vez
+      await prefs.setBool('isFirstRun', false);
+    } else {
+      // 📦 Cargar desde Hive
+      _cachedMaster = await masterRepository.getMasterFromCache();
+      _cachedUser = await userRepository.getUserFromCache();
+    }
+
+    if (_cachedUser == null || _cachedMaster == null) {
+      throw Exception("Error inicializando datos locales.");
+    }
+  }
+
+  Master get master => _cachedMaster!;
+  User get user => _cachedUser!;
+}
 
 class EventUseCases {
   /// Determina el estado temporal de un evento

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
@@ -17,6 +20,15 @@ class EventHeader extends StatelessWidget {
     required this.color,
   });
 
+  /// 🔁 Decodifica imagen base64 a bytes para usar en Image.memory
+  Uint8List decodeBase64Image(String base64String) {
+    try {
+      return base64Decode(base64String);
+    } catch (e) {
+      return Uint8List(0); // Imagen vacía si falla
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -30,9 +42,9 @@ class EventHeader extends StatelessWidget {
           ),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Nombre y descripción del evento
+            // 📌 Textos del evento
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,18 +57,36 @@ class EventHeader extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(height: 4),
                   Text(
                     event.description,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: Colors.white70,
                       fontSize: 12,
                     ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(width: 12),
+
+            // 🖼 Imagen en base64
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.memory(
+                decodeBase64Image(event.coverImageUrl),
+                width: 60,
+                height: 60,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => const Icon(
+                  Icons.broken_image,
+                  color: Colors.white,
+                ),
+              ),
+            ),
             const SizedBox(width: 8),
-            // Botón de suscripción
+
+            // 🔘 Botón de suscripción
             Consumer<EventController>(
               builder: (context, controller, _) {
                 final isSubscribed = controller.checkSubscriptionStatus(event);

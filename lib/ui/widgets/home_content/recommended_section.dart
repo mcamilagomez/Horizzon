@@ -4,7 +4,7 @@ import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
 
 import 'package:horizzon/ui/controllers/theme_controller.dart';
-import 'package:horizzon/ui/widgets/event_list.dart';
+import 'package:horizzon/ui/widgets/recomended/event_list.dart';
 
 class RecommendedSection extends StatelessWidget {
   final List<Event> randomEvents;

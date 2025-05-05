@@ -10,7 +10,7 @@ import '../controllers/theme_controller.dart';
 import 'package:provider/provider.dart';
 import '../controllers/event_controller.dart';
 import 'package:horizzon/ui/widgets/eventos_content/event_track_eventos.dart';
-import 'package:horizzon/ui/widgets/event_card.dart';
+import 'package:horizzon/ui/widgets/recomended/event_card.dart';
 
 class EventosPage extends StatefulWidget {
   final User user;
@@ -30,7 +30,6 @@ class _EventosPageState extends State<EventosPage> {
   @override
   void initState() {
     super.initState();
-    master = Master.createWithSampleData();
     for (var track in master.eventTracks) {
       _expandedTracks[track.id] = false;
     }

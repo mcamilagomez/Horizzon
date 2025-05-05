@@ -4,7 +4,7 @@ import 'package:horizzon/domain/use_case/use_case.dart';
 import 'package:horizzon/ui/pages/event_detail_page.dart';
 import 'package:provider/provider.dart';
 import 'package:horizzon/domain/entities/event.dart';
-import '../controllers/event_controller.dart';
+import '../../controllers/event_controller.dart';
 
 class EventCard extends StatelessWidget {
   final Event event;
