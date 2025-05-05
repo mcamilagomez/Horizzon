@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:horizzon/domain/use_case/use_case.dart';
+import 'package:horizzon/domain/entities/event.dart';
+import 'package:horizzon/domain/repositories/master_repository.dart';
 
 class FeedbackForm extends StatefulWidget {
   final Event event;
   final User user;
   final Color color;
+  final MasterRepository masterRepo; // <<<<<<
 
   const FeedbackForm({
     super.key,
     required this.event,
     required this.user,
     required this.color,
+    required this.masterRepo, // <<<<<<
   });
 
   @override
@@ -31,7 +35,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
     super.dispose();
   }
 
-  void _submitFeedback(BuildContext context) async {
+  Future<void> _submitFeedback(BuildContext context) async {
     if (_selectedStars == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -40,30 +44,62 @@ class _FeedbackFormState extends State<FeedbackForm> {
       return;
     }
 
+    final connectivity = await Connectivity().checkConnectivity();
+    final hasConnection = connectivity != ConnectivityResult.none;
+
+    if (!hasConnection) {
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text("Sin conexión"),
+            content: const Text(
+                "No puedes enviar una review sin conexión a internet."),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+      }
+      return;
+    }
+
     setState(() => _isSubmitting = true);
 
     try {
-      EventUseCases.addFeedback(
-        _commentController.text,
-        widget.event,
-        _selectedStars,
-        'User${widget.user.hash}',
+      final newFeedback = FeedbackbyUser(
+        userId: 'User${widget.user.hash}',
+        stars: _selectedStars,
+        comment: _commentController.text,
       );
+
+      // Enviar al servidor
+      await widget.masterRepo.addFeedback(
+        eventId: widget.event.id,
+        feedback: newFeedback,
+      );
+
+      // Agregar localmente al evento
+      widget.event.feedbacks.insert(0, newFeedback);
+
+      // Resetear formulario
+      setState(() {
+        _selectedStars = 0;
+        _commentController.clear();
+        _isSubmitting = false;
+      });
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('¡Gracias por tu review!')),
       );
-
-      _commentController.clear();
-      setState(() {
-        _selectedStars = 0;
-        _isSubmitting = false;
-      });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
       setState(() => _isSubmitting = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al enviar: ${e.toString()}')),
+      );
     }
   }
 

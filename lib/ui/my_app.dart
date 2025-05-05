@@ -72,7 +72,9 @@ class MyApp extends StatelessWidget {
         getPages: [
           GetPage(
               name: '/home', page: () => HomePage(master: master, user: user)),
-          GetPage(name: '/eventos', page: () => EventosPage(user: user)),
+          GetPage(
+              name: '/eventos',
+              page: () => EventosPage(user: user, master: master)),
           GetPage(name: '/agenda', page: () => AgendaPage(user: user)),
           GetPage(name: '/ajustes', page: () => AjustesPage()),
         ],

@@ -1,12 +1,10 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:provider/provider.dart';
 import 'package:horizzon/ui/controllers/event_controller.dart';
 import 'package:horizzon/domain/use_case/use_case.dart';
+import 'package:provider/provider.dart';
+import 'package:horizzon/utils/img_utils.dart';
 
 class EventHeader extends StatelessWidget {
   final Event event;
@@ -20,17 +18,10 @@ class EventHeader extends StatelessWidget {
     required this.color,
   });
 
-  /// 🔁 Decodifica imagen base64 a bytes para usar en Image.memory
-  Uint8List decodeBase64Image(String base64String) {
-    try {
-      return base64Decode(base64String);
-    } catch (e) {
-      return Uint8List(0); // Imagen vacía si falla
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final imageBytes = decodeBase64Image(event.coverImageUrl);
+
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -44,7 +35,7 @@ class EventHeader extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // 📌 Textos del evento
+            // Información del evento
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,23 +61,23 @@ class EventHeader extends StatelessWidget {
             ),
             const SizedBox(width: 12),
 
-            // 🖼 Imagen en base64
+            // Imagen del evento
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.memory(
-                decodeBase64Image(event.coverImageUrl),
-                width: 60,
-                height: 60,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const Icon(
-                  Icons.broken_image,
-                  color: Colors.white,
-                ),
-              ),
+              child: imageBytes.isNotEmpty
+                  ? Image.memory(
+                      imageBytes,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) =>
+                          const Icon(Icons.broken_image, color: Colors.white),
+                    )
+                  : const Icon(Icons.broken_image, color: Colors.white),
             ),
             const SizedBox(width: 8),
 
-            // 🔘 Botón de suscripción
+            // Botón de suscripción
             Consumer<EventController>(
               builder: (context, controller, _) {
                 final isSubscribed = controller.checkSubscriptionStatus(event);
@@ -99,9 +90,9 @@ class EventHeader extends StatelessWidget {
 
                 if (isEventOver) {
                   buttonColor = Colors.grey;
-                  buttonText = isSubscribed ? 'Desuscribirse' : 'Suscribirse';
+                  buttonText = 'Finalizado';
                   isButtonEnabled = false;
-                } else if (!isEventAvailable) {
+                } else if (!isEventAvailable && !isSubscribed) {
                   buttonColor = Colors.grey;
                   buttonText = 'No disponible';
                   isButtonEnabled = false;
@@ -115,7 +106,8 @@ class EventHeader extends StatelessWidget {
                   height: 30,
                   child: ElevatedButton(
                     onPressed: isButtonEnabled
-                        ? () => controller.toggleSuscripcion(event)
+                        ? () async =>
+                            await controller.toggleSuscripcion(event, context)
                         : null,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
