@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
 import 'package:horizzon/domain/use_case/use_case.dart';
-import 'package:horizzon/ui/app/event_detail_page.dart';
+import 'package:horizzon/ui/pages/event_detail_page.dart';
 
 class EventPill extends StatelessWidget {
   final Event event;

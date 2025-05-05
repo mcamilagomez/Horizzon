@@ -8,7 +8,7 @@ import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:horizzon/ui/app/event_detail_page.dart';
+import 'package:horizzon/ui/pages/event_detail_page.dart';
 
 class AgendaPage extends StatefulWidget {
   final User user;
@@ -19,7 +19,7 @@ class AgendaPage extends StatefulWidget {
   State<AgendaPage> createState() => _AgendaPageState();
 }
 
-class _AgendaPageState extends State<AgendaPage> { 
+class _AgendaPageState extends State<AgendaPage> {
   DateTime _currentDate = DateTime.now();
   DateTime? _selectedDate;
   final ScrollController _daysScrollController = ScrollController();
@@ -64,8 +64,7 @@ class _AgendaPageState extends State<AgendaPage> {
   bool _isEventOnDate(Event event, DateTime date) {
     if (_isSameDay(event.initialDate, date)) return true;
     if (_isSameDay(event.initialDate, event.finalDate)) return false;
-    return (date.isAfter(event.initialDate) &&
-            date.isBefore(event.finalDate) ||
+    return (date.isAfter(event.initialDate) && date.isBefore(event.finalDate) ||
         _isSameDay(event.finalDate, date));
   }
 
@@ -86,10 +85,12 @@ class _AgendaPageState extends State<AgendaPage> {
         feedbacks.length;
   }
 
-  Widget _buildDayContainer(Map<String, dynamic> day, ThemeData theme, List<Event> userEvents) {
+  Widget _buildDayContainer(
+      Map<String, dynamic> day, ThemeData theme, List<Event> userEvents) {
     final date = day['date'] as DateTime;
     final isToday = day['isToday'];
-    final isSelected = _selectedDate != null && _isSameDay(_selectedDate!, date);
+    final isSelected =
+        _selectedDate != null && _isSameDay(_selectedDate!, date);
     final isWeekend = day['weekday'] == 'Sat' || day['weekday'] == 'Sun';
     final hasEvents = _hasEvents(userEvents, date);
     final isCurrentMonth = date.month == _currentDate.month;
@@ -153,7 +154,8 @@ class _AgendaPageState extends State<AgendaPage> {
                               ? theme.colorScheme.onSecondary
                               : isCurrentMonth
                                   ? theme.colorScheme.onSurface
-                                  : theme.colorScheme.onSurface.withOpacity(0.3),
+                                  : theme.colorScheme.onSurface
+                                      .withOpacity(0.3),
                     ),
                   ),
                 ),
@@ -378,7 +380,8 @@ class _AgendaPageState extends State<AgendaPage> {
                                     ),
                                     Text(
                                       currentMonthYear,
-                                      style: theme.textTheme.titleLarge?.copyWith(
+                                      style:
+                                          theme.textTheme.titleLarge?.copyWith(
                                         color: theme.colorScheme.onPrimary,
                                         fontWeight: FontWeight.bold,
                                       ),
