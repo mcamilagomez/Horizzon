@@ -10,7 +10,7 @@ class Event {
   final String location;
   final int capacity;
   int availableSeats;
-  final String coverImageUrl;
+  final String coverImageUrl; // Aquí será base64 temporalmente
   final String cardImageUrl;
   final String eventTrackName;
 
@@ -30,6 +30,28 @@ class Event {
     required this.cardImageUrl,
     required this.eventTrackName,
   });
+
+  factory Event.fromJson(Map<String, dynamic> json) {
+    return Event(
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      longDescription: json['long_description'],
+      speakers: List<String>.from(json['speakers'] ?? []),
+      feedbacks: (json['feedbacks'] as List<dynamic>?)
+              ?.map((e) => FeedbackbyUser.fromJson(e))
+              .toList() ??
+          [],
+      initialDate: DateTime.parse(json['initial_date']),
+      finalDate: DateTime.parse(json['final_date']),
+      location: json['location'],
+      capacity: json['capacity'],
+      availableSeats: json['available_seats'],
+      coverImageUrl: json['cover_image'] ?? '',
+      cardImageUrl: json['card_image'] ?? '',
+      eventTrackName: json['event_track_name'],
+    );
+  }
 }
 
 class FeedbackbyUser {
@@ -42,4 +64,12 @@ class FeedbackbyUser {
     required this.stars,
     required this.comment,
   });
+
+  factory FeedbackbyUser.fromJson(Map<String, dynamic> json) {
+    return FeedbackbyUser(
+      userId: json['user_id'],
+      stars: json['stars'],
+      comment: json['comment'],
+    );
+  }
 }

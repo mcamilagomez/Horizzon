@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:horizzon/domain/entities/master.dart';
-import 'package:horizzon/domain/entities/event.dart';
-import 'package:horizzon/domain/entities/event_track.dart';
 import 'package:horizzon/domain/entities/user.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import '../controllers/theme_controller.dart';
-import 'package:provider/provider.dart';
-import '../controllers/event_controller.dart';
+
 import 'package:horizzon/ui/widgets/eventos_content/event_track_eventos.dart';
-import 'package:horizzon/ui/widgets/event_card.dart';
 
 class EventosPage extends StatefulWidget {
   final User user;
-
-  const EventosPage({super.key, required this.user});
+  final Master master;
+  const EventosPage({super.key, required this.user, required this.master});
 
   @override
   State<EventosPage> createState() => _EventosPageState();
@@ -24,14 +20,12 @@ class EventosPage extends StatefulWidget {
 class _EventosPageState extends State<EventosPage> {
   final Map<int, bool> _expandedTracks = {};
   final ThemeController themeController = Get.find<ThemeController>();
-  late final Master master;
 
   final Key stateKey = const Key('EventosPageState');
   @override
   void initState() {
     super.initState();
-    master = Master.createWithSampleData();
-    for (var track in master.eventTracks) {
+    for (var track in widget.master.eventTracks) {
       _expandedTracks[track.id] = false;
     }
   }
@@ -86,9 +80,9 @@ class _EventosPageState extends State<EventosPage> {
                       Expanded(
                         child: ListView.builder(
                           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                          itemCount: master.eventTracks.length,
+                          itemCount: widget.master.eventTracks.length,
                           itemBuilder: (context, trackIndex) {
-                            final track = master.eventTracks[trackIndex];
+                            final track = widget.master.eventTracks[trackIndex];
                             return EventTrackCard(
                               track: track,
                               isExpanded: _expandedTracks[track.id] ?? false,

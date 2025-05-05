@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:horizzon/ui/widgets/event_pills_list.dart';
+import 'package:horizzon/ui/widgets/reminders/event_pills_list.dart';
 
 void main() {
   late User mockUser;

@@ -13,7 +13,9 @@ import 'package:horizzon/ui/translations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final User user;
+  final Master master;
+  const MyApp({super.key, required this.user, required this.master});
 
   static const Color primaryColor = Color.fromRGBO(18, 37, 98, 1);
   static const Color darkBackground = Color(0xFF1A1A2E);
@@ -21,9 +23,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final master = Master.createWithSampleData();
-    final user = User(hash: "123456", myEvents: []);
-
     // Registrar los controladores
     Get.put(BottomNavController());
     Get.put(LanguageController());
@@ -38,7 +37,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         defaultTransition: Transition.noTransition,
         transitionDuration: Duration.zero,
-        themeMode: themeController.isDark.value ? ThemeMode.dark : ThemeMode.light,
+        themeMode:
+            themeController.isDark.value ? ThemeMode.dark : ThemeMode.light,
         theme: ThemeData(
           brightness: Brightness.light,
           primaryColor: primaryColor,
@@ -70,8 +70,11 @@ class MyApp extends StatelessWidget {
         fallbackLocale: const Locale('es', 'ES'),
         initialRoute: '/home',
         getPages: [
-          GetPage(name: '/home', page: () => HomePage(master: master, user: user)),
-          GetPage(name: '/eventos', page: () => EventosPage(user: user)),
+          GetPage(
+              name: '/home', page: () => HomePage(master: master, user: user)),
+          GetPage(
+              name: '/eventos',
+              page: () => EventosPage(user: user, master: master)),
           GetPage(name: '/agenda', page: () => AgendaPage(user: user)),
           GetPage(name: '/ajustes', page: () => AjustesPage()),
         ],

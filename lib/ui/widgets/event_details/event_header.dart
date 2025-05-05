@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:provider/provider.dart';
 import 'package:horizzon/ui/controllers/event_controller.dart';
 import 'package:horizzon/domain/use_case/use_case.dart';
+import 'package:provider/provider.dart';
+import 'package:horizzon/utils/img_utils.dart';
 
 class EventHeader extends StatelessWidget {
   final Event event;
@@ -19,6 +20,8 @@ class EventHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageBytes = decodeBase64Image(event.coverImageUrl);
+
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -30,9 +33,9 @@ class EventHeader extends StatelessWidget {
           ),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Nombre y descripción del evento
+            // Información del evento
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,17 +48,35 @@ class EventHeader extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(height: 4),
                   Text(
                     event.description,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: Colors.white70,
                       fontSize: 12,
                     ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(width: 12),
+
+            // Imagen del evento
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: imageBytes.isNotEmpty
+                  ? Image.memory(
+                      imageBytes,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) =>
+                          const Icon(Icons.broken_image, color: Colors.white),
+                    )
+                  : const Icon(Icons.broken_image, color: Colors.white),
+            ),
             const SizedBox(width: 8),
+
             // Botón de suscripción
             Consumer<EventController>(
               builder: (context, controller, _) {
@@ -69,9 +90,9 @@ class EventHeader extends StatelessWidget {
 
                 if (isEventOver) {
                   buttonColor = Colors.grey;
-                  buttonText = isSubscribed ? 'Desuscribirse' : 'Suscribirse';
+                  buttonText = 'Finalizado';
                   isButtonEnabled = false;
-                } else if (!isEventAvailable) {
+                } else if (!isEventAvailable && !isSubscribed) {
                   buttonColor = Colors.grey;
                   buttonText = 'No disponible';
                   isButtonEnabled = false;
@@ -85,7 +106,8 @@ class EventHeader extends StatelessWidget {
                   height: 30,
                   child: ElevatedButton(
                     onPressed: isButtonEnabled
-                        ? () => controller.toggleSuscripcion(event)
+                        ? () async =>
+                            await controller.toggleSuscripcion(event, context)
                         : null,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 8),

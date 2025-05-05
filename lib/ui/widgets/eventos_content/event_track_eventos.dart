@@ -1,8 +1,11 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:horizzon/domain/entities/event_track.dart';
 import 'package:horizzon/domain/entities/user.dart';
 import 'package:horizzon/ui/widgets/eventos_content/event_card_eventos.dart';
-import 'package:get/get.dart';
 
 class EventTrackCard extends StatelessWidget {
   final EventTrack track;
@@ -22,11 +25,23 @@ class EventTrackCard extends StatelessWidget {
     required this.onToggleExpand,
   });
 
+  /// Helper para decodificar base64 con encabezado
+  Uint8List? _decodeBase64(String base64Str) {
+    try {
+      final regex = RegExp(r'data:image/[^;]+;base64,');
+      final cleaned = base64Str.replaceAll(regex, '');
+      return base64Decode(cleaned);
+    } catch (_) {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final cardColor = isDark ? const Color(0xFF2C2C2E) : Colors.white;
     final borderColor = isDark ? Colors.white10 : Colors.grey[200]!;
-    final eventsToShow = isExpanded ? track.events : track.events.take(2).toList();
+    final eventsToShow =
+        isExpanded ? track.events : track.events.take(2).toList();
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -55,8 +70,7 @@ class EventTrackCard extends StatelessWidget {
                       isDark: isDark,
                       user: user,
                     )),
-                if (track.events.length > 2)
-                  _buildExpandButton(),
+                if (track.events.length > 2) _buildExpandButton(),
               ],
             ),
           ),
@@ -66,57 +80,73 @@ class EventTrackCard extends StatelessWidget {
   }
 
   Widget _buildTrackHeader() {
+    final imageBytes = _decodeBase64(track.coverImageUrl);
+
     return Container(
       height: 140,
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(track.coverImageUrl),
-          fit: BoxFit.cover,
-        ),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-            colors: [
-              Colors.black.withOpacity(0.7),
-              Colors.transparent,
-            ],
-          ),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(12),
-            topRight: Radius.circular(12),
-          ),
-        ),
-        padding: const EdgeInsets.all(16),
-        alignment: Alignment.bottomLeft,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              track.name,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (imageBytes != null)
+            Image.memory(
+              imageBytes,
+              fit: BoxFit.cover,
+            )
+          else
+            Container(
+              color: Colors.black12,
+              child: const Center(
+                child: Icon(Icons.broken_image, color: Colors.white),
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              track.description,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white,
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  Colors.black.withOpacity(0.7),
+                  Colors.transparent,
+                ],
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
               ),
             ),
-          ],
-        ),
+            padding: const EdgeInsets.all(16),
+            alignment: Alignment.bottomLeft,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  track.name,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  track.description,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:horizzon/ui/widgets/event_card.dart';
+import 'package:horizzon/ui/widgets/recomended/event_card.dart';
 
 class EventList extends StatelessWidget {
   final List<Event> events;
