@@ -15,6 +15,7 @@ void main() {
       Event(
         id: 1,
         name: 'Event 1',
+        eventTrackId: 1,
         description: 'Description 1',
         initialDate: DateTime.now().add(const Duration(days: 1)),
         finalDate: DateTime.now().add(const Duration(days: 2)),
@@ -32,6 +33,7 @@ void main() {
         id: 2,
         name: 'Event 2',
         description: 'Description 2',
+        eventTrackId: 2,
         initialDate: DateTime.now().add(const Duration(days: 3)),
         finalDate: DateTime.now().add(const Duration(days: 4)),
         cardImageUrl: '',

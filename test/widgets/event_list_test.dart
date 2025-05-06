@@ -16,6 +16,7 @@ void main() {
     id: 1,
     name: 'Conferencia Flutter',
     description: 'Descripción corta',
+    eventTrackId: 1,
     longDescription: 'Descripción larga',
     speakers: ['Speaker 1'],
     feedbacks: [],

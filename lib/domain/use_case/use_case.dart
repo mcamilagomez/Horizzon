@@ -19,7 +19,7 @@ class AppInitializationUseCase {
 
   Future<void> initializeApp() async {
     final prefs = await SharedPreferences.getInstance();
-    final isFirstRun = true;
+    final isFirstRun = prefs.getBool('isFirstRun') ?? true;
 
     if (isFirstRun) {
       // 🔁 Obtener datos iniciales
