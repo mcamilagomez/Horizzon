@@ -1,5 +1,6 @@
 //Acá es hacer el fetch para obetener master
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:horizzon/domain/entities/recommended.dart';
 import 'package:http/http.dart' as http;
 import 'package:horizzon/domain/entities/event.dart';
@@ -70,7 +71,6 @@ class RemoteDataSource {
     if (response.statusCode != 200) {
       throw Exception('Error al obtener datos');
     }
-
     final List decoded = json.decode(response.body);
     // Aquí necesitas tener un parser para convertir el JSON completo a tu entidad `Master`
     // Ejemplo:

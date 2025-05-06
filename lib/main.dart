@@ -34,9 +34,11 @@ import 'package:horizzon/data/models/user_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await initializeDateFormatting('es_CO', null);
   await Hive.initFlutter();
+
+  // ✅ Activar para limpiar Hive al iniciar (útil en desarrollo)
+  const clearHiveOnStart = true;
 
   // Registro de adaptadores Hive
   Hive.registerAdapter(FeedbackByUserModelAdapter());
@@ -44,6 +46,11 @@ Future<void> main() async {
   Hive.registerAdapter(EventTrackModelAdapter());
   Hive.registerAdapter(MasterModelAdapter());
   Hive.registerAdapter(UserModelAdapter());
+
+  if (clearHiveOnStart) {
+    await Hive.deleteBoxFromDisk('userBox');
+    await Hive.deleteBoxFromDisk('masterBox');
+  }
 
   // Abrir boxes
   final userBox = await Hive.openBox<UserModel>('userBox');
@@ -75,6 +82,11 @@ Future<void> main() async {
   final User user = appInit.user;
   final Master master = appInit.master;
 
+  print("🖼️ Descripción:");
+  print(master.eventTracks[0].description);
+  print("🖼️ Longitud de imagen base64:");
+  print(master.eventTracks[0].coverImageUrl.length);
+
   // Inyectar controladores globales con GetX
   Get.put(ThemeController());
   Get.put(LanguageController());
@@ -82,7 +94,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        Provider<MasterRepository>.value(value: masterRepo), // ✅ Global access
+        Provider<MasterRepository>.value(value: masterRepo),
         Provider<UserRepository>.value(value: userRepo),
         ChangeNotifierProvider(
           create: (_) => EventController(

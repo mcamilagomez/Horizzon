@@ -19,13 +19,12 @@ class AppInitializationUseCase {
 
   Future<void> initializeApp() async {
     final prefs = await SharedPreferences.getInstance();
-    final isFirstRun = prefs.getBool('isFirstRun') ?? true;
+    final isFirstRun = true;
 
     if (isFirstRun) {
       // 🔁 Obtener datos iniciales
       await masterRepository.fetchAndCacheMasterData();
       _cachedMaster = await masterRepository.getMasterFromCache();
-      print("Se hizo fetch");
 
       _cachedUser = await userRepository.createUserWithHash();
       await prefs.setBool('isFirstRun', false);

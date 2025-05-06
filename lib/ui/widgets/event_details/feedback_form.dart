@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/repositories/master_repository.dart';
 
 class FeedbackForm extends StatefulWidget {

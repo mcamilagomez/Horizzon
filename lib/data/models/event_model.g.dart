@@ -31,13 +31,14 @@ class EventModelAdapter extends TypeAdapter<EventModel> {
       coverImageUrl: fields[11] as String,
       cardImageUrl: fields[12] as String,
       eventTrackName: fields[13] as String,
+      eventTrackId: fields[14] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, EventModel obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -65,7 +66,9 @@ class EventModelAdapter extends TypeAdapter<EventModel> {
       ..writeByte(12)
       ..write(obj.cardImageUrl)
       ..writeByte(13)
-      ..write(obj.eventTrackName);
+      ..write(obj.eventTrackName)
+      ..writeByte(14)
+      ..write(obj.eventTrackId);
   }
 
   @override

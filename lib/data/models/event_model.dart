@@ -48,6 +48,9 @@ class EventModel extends HiveObject {
   @HiveField(13)
   final String eventTrackName;
 
+  @HiveField(14)
+  final int eventTrackId;
+
   EventModel({
     required this.id,
     required this.name,
@@ -63,6 +66,7 @@ class EventModel extends HiveObject {
     required this.coverImageUrl,
     required this.cardImageUrl,
     required this.eventTrackName,
+    required this.eventTrackId,
   });
 
   Event toEntity() => Event(
@@ -80,6 +84,7 @@ class EventModel extends HiveObject {
         coverImageUrl: coverImageUrl,
         cardImageUrl: cardImageUrl,
         eventTrackName: eventTrackName,
+        eventTrackId: eventTrackId,
       );
 
   factory EventModel.fromEntity(Event entity) => EventModel(
@@ -99,5 +104,6 @@ class EventModel extends HiveObject {
         coverImageUrl: entity.coverImageUrl,
         cardImageUrl: entity.cardImageUrl,
         eventTrackName: entity.eventTrackName,
+        eventTrackId: entity.eventTrackId,
       );
 }
