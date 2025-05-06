@@ -7,7 +7,7 @@ import 'package:horizzon/ui/controllers/event_controller.dart';
 import 'package:horizzon/ui/controllers/theme_controller.dart';
 import 'package:horizzon/ui/widgets/reminders/event_pills_list.dart';
 
-class RemindersSection extends StatelessWidget {
+class RemindersSection extends StatelessWidget { 
   final User user;
 
   const RemindersSection({

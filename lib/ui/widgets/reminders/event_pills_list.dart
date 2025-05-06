@@ -36,10 +36,13 @@ class EventPillsList extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: events.length,
         itemBuilder: (context, index) {
-          return EventPill(
-            event: events[index],
-            colorPrincipal: colorPrincipal,
-            user: user,
+          return Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: EventPill(
+              event: events[index],
+              colorPrincipal: colorPrincipal,
+              user: user,
+            ),
           );
         },
       ),

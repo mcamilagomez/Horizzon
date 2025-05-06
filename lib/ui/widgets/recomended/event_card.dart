@@ -8,7 +8,7 @@ import 'package:horizzon/domain/use_case/use_case.dart';
 import 'package:horizzon/ui/pages/event_detail_page.dart';
 import '../../controllers/event_controller.dart';
 
-class EventCard extends StatelessWidget {
+class EventCard extends StatelessWidget { 
   final Event event;
   final Color colorPrincipal;
   final User user;

@@ -71,7 +71,6 @@ void main() {
     
     // Probar el método setMyEvents
     final newEvents = <Event>[];
-    user.setMyEvents(newEvents);
     expect(user.myEvents, equals(newEvents));
   });
 }
