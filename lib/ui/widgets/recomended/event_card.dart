@@ -22,10 +22,11 @@ class EventCard extends StatelessWidget {
 
   Uint8List? _decodeBase64(String base64Str) {
     try {
-      final regex = RegExp(r'data:image/[^;]+;base64,');
-      final cleaned = base64Str.replaceAll(regex, '');
+      final cleaned =
+          base64Str.contains(',') ? base64Str.split(',')[1] : base64Str;
       return base64Decode(cleaned);
-    } catch (_) {
+    } catch (e) {
+      debugPrint("Error al decodificar base64: $e");
       return null;
     }
   }

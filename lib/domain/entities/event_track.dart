@@ -24,10 +24,9 @@ class EventTrack {
       description: json['description'],
       coverImageUrl: json['cover_image'] ?? '',
       overlayImageUrl: json['overlay_image'] ?? '',
-      events: (json['events'] as List<dynamic>?)
-              ?.map((e) => Event.fromJson(e))
-              .toList() ??
-          [],
+      events: (json['events'] as List<dynamic>)
+          .map((e) => Event.fromJson(e))
+          .toList(),
     );
   }
 }

@@ -3,7 +3,6 @@ import 'package:horizzon/data/datasources/remote/remote_datasource.dart';
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/repositories/master_repository.dart';
-import 'package:horizzon/utils/image_utils.dart'; // Aquí guardamos nuestra utilidad
 
 class MasterRepositoryImpl implements MasterRepository {
   final RemoteDataSource _remoteDataSource;
@@ -17,43 +16,14 @@ class MasterRepositoryImpl implements MasterRepository {
 
   MasterLocalDataSource get local => _localDataSource;
 
+  /// 🔄 Fetch y guarda los datos completos de master sin alterar base64
   @override
   Future<void> fetchAndCacheMasterData() async {
     final master = await _remoteDataSource.getFullData();
-
-    // Procesar imágenes antes de guardar en Hive
-    for (final track in master.eventTracks) {
-      final newCoverPath = await saveBase64ImageToFile(
-        track.coverImageUrl,
-        'track-${track.id}-cover.png',
-      );
-      final newOverlayPath = await saveBase64ImageToFile(
-        track.overlayImageUrl,
-        'track-${track.id}-overlay.png',
-      );
-
-      // ⚠️ hack temporal para sobrescribir atributos finales (porque son final)
-      (track as dynamic).coverImageUrl = newCoverPath ?? '';
-      (track as dynamic).overlayImageUrl = newOverlayPath ?? '';
-
-      for (final event in track.events) {
-        final newCardPath = await saveBase64ImageToFile(
-          event.cardImageUrl,
-          'event-${event.id}-card.png',
-        );
-        final newCoverPath = await saveBase64ImageToFile(
-          event.coverImageUrl,
-          'event-${event.id}-cover.png',
-        );
-
-        (event as dynamic).cardImageUrl = newCardPath ?? '';
-        (event as dynamic).coverImageUrl = newCoverPath ?? '';
-      }
-    }
-
     await _localDataSource.saveMaster(master);
   }
 
+  /// ✅ Obtener master desde caché local
   @override
   Future<Master> getMasterFromCache() async {
     final cachedMaster = await _localDataSource.getMaster();
@@ -63,6 +33,7 @@ class MasterRepositoryImpl implements MasterRepository {
     return cachedMaster;
   }
 
+  /// 📝 Enviar feedback de usuario
   @override
   Future<void> addFeedback({
     required int eventId,
@@ -71,11 +42,13 @@ class MasterRepositoryImpl implements MasterRepository {
     await _remoteDataSource.addFeedback(feedback, eventId);
   }
 
+  /// ➕ Aumentar cupos disponibles
   @override
   Future<int> incrementAvailableSeats(int eventId) async {
     return await _remoteDataSource.incrementAvailableSeats(eventId);
   }
 
+  /// ➖ Disminuir cupos disponibles
   @override
   Future<int> decrementAvailableSeats(int eventId) async {
     return await _remoteDataSource.decrementAvailableSeats(eventId);
