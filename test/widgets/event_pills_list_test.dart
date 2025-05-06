@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:horizzon/ui/widgets/event_pills_list.dart';
-import 'package:horizzon/ui/widgets/event_pill.dart'; // Asegúrate de que esta importación sea correcta
+import 'package:horizzon/ui/widgets/reminders/event_pill.dart';
+import 'package:horizzon/ui/widgets/reminders/event_pills_list.dart'; // Asegúrate de que esta importación sea correcta
 void main() {
   // Datos de prueba
   final testUser = User(

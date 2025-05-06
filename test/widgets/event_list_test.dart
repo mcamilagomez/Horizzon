@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:horizzon/ui/widgets/event_list.dart';
+import 'package:horizzon/ui/widgets/recomended/event_list.dart';
 
 void main() {
   // Usuario de prueba
@@ -45,7 +45,8 @@ void main() {
   });
 
   /// 2. Muestra lista vacía correctamente
-  testWidgets('EventList con lista vacía muestra ListView', (WidgetTester tester) async {
+  testWidgets('EventList con lista vacía muestra ListView',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -62,7 +63,8 @@ void main() {
   });
 
   /// 3. Verifica padding correcto
-  testWidgets('EventList tiene el padding correcto', (WidgetTester tester) async {
+  testWidgets('EventList tiene el padding correcto',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -98,7 +100,8 @@ void main() {
   });
 
   /// 5. Acepta color primario sin errores
-  testWidgets('EventList acepta color primario personalizado', (WidgetTester tester) async {
+  testWidgets('EventList acepta color primario personalizado',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -113,6 +116,4 @@ void main() {
 
     expect(find.byType(EventList), findsOneWidget);
   });
-
-
 }

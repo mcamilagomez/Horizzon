@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
-import 'package:horizzon/ui/widgets/event_pill.dart';
-import 'package:horizzon/ui/widgets/event_pills_list.dart';
+import 'package:horizzon/ui/widgets/reminders/event_pill.dart';
+import 'package:horizzon/ui/widgets/reminders/event_pills_list.dart';
 
 // Mocks
 class MockEvent extends Mock implements Event {}

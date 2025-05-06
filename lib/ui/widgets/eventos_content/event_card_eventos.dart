@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:horizzon/domain/entities/event.dart';
@@ -20,8 +22,20 @@ class EventCard extends StatelessWidget {
     required this.user,
   });
 
+  Uint8List? _decodeBase64(String base64Str) {
+    try {
+      final regex = RegExp(r'data:image/[^;]+;base64,');
+      final cleaned = base64Str.replaceAll(regex, '');
+      return base64Decode(cleaned);
+    } catch (_) {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final imageBytes = _decodeBase64(event.coverImageUrl);
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -41,23 +55,33 @@ class EventCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF3A3A3C) : Colors.grey[50],
           borderRadius: BorderRadius.circular(8),
-          border:
-              Border.all(color: isDark ? Colors.white10 : Colors.grey[200]!),
+          border: Border.all(
+            color: isDark ? Colors.white10 : Colors.grey[200]!,
+          ),
         ),
         child: Row(
           children: [
+            // Imagen
             Container(
               width: 60,
               height: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  image: AssetImage(event.coverImageUrl),
-                  fit: BoxFit.cover,
-                ),
+                color: Colors.black12,
               ),
+              clipBehavior: Clip.antiAlias,
+              child: imageBytes != null
+                  ? Image.memory(
+                      imageBytes,
+                      fit: BoxFit.cover,
+                    )
+                  : const Center(
+                      child: Icon(Icons.broken_image, color: Colors.white),
+                    ),
             ),
             const SizedBox(width: 12),
+
+            // Info del evento
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,6 +110,8 @@ class EventCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
+
+            // Botón de suscripción
             Consumer<EventController>(
               builder: (context, controller, _) {
                 final isSubscribed = controller.checkSubscriptionStatus(event);
@@ -98,9 +124,9 @@ class EventCard extends StatelessWidget {
 
                 if (isEventOver) {
                   buttonColor = Colors.grey;
-                  buttonText = isSubscribed ? 'Desuscribirse' : 'Suscribirse';
+                  buttonText = 'Finalizado';
                   isButtonEnabled = false;
-                } else if (!isEventAvailable) {
+                } else if (!isEventAvailable && !isSubscribed) {
                   buttonColor = Colors.grey;
                   buttonText = 'No disponible';
                   isButtonEnabled = false;
@@ -115,7 +141,8 @@ class EventCard extends StatelessWidget {
                   width: 100,
                   child: ElevatedButton(
                     onPressed: isButtonEnabled
-                        ? () => controller.toggleSuscripcion(event)
+                        ? () async =>
+                            await controller.toggleSuscripcion(event, context)
                         : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: buttonColor,
