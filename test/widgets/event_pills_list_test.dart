@@ -4,6 +4,7 @@ import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/user.dart';
 import 'package:horizzon/ui/widgets/reminders/event_pill.dart';
 import 'package:horizzon/ui/widgets/reminders/event_pills_list.dart'; // Asegúrate de que esta importación sea correcta
+
 void main() {
   // Datos de prueba
   final testUser = User(
@@ -14,6 +15,7 @@ void main() {
   final testEvent = Event(
     id: 1,
     name: 'Test Event',
+    eventTrackId: 1,
     description: 'Short description',
     longDescription: 'Long description of the event',
     speakers: ['Speaker 1', 'Speaker 2'],
@@ -61,6 +63,5 @@ void main() {
       expect(find.byType(ListView), findsNothing);
       expect(find.byType(EventPill), findsNothing);
     });
-
   });
 }

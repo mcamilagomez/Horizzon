@@ -37,20 +37,12 @@ Future<void> main() async {
   await initializeDateFormatting('es_CO', null);
   await Hive.initFlutter();
 
-  // ✅ Activar para limpiar Hive al iniciar (útil en desarrollo)
-  const clearHiveOnStart = true;
-
   // Registro de adaptadores Hive
   Hive.registerAdapter(FeedbackByUserModelAdapter());
   Hive.registerAdapter(EventModelAdapter());
   Hive.registerAdapter(EventTrackModelAdapter());
   Hive.registerAdapter(MasterModelAdapter());
   Hive.registerAdapter(UserModelAdapter());
-
-  if (clearHiveOnStart) {
-    await Hive.deleteBoxFromDisk('userBox');
-    await Hive.deleteBoxFromDisk('masterBox');
-  }
 
   // Abrir boxes
   final userBox = await Hive.openBox<UserModel>('userBox');

@@ -22,6 +22,7 @@ void main() {
     return Event(
       id: id,
       name: name,
+      eventTrackId: 1,
       description: 'Description $id',
       longDescription: 'Long description $id',
       speakers: ['Speaker $id'],
