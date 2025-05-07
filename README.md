@@ -50,7 +50,7 @@
 ---
 
 ## 🧪 Testing
-- Cada widget y página está respaldado por pruebas automatizadas.
+**[📺 Ver video demo - Testing](#)**
 
 ---
 
