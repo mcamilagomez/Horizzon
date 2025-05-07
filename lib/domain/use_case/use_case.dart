@@ -30,6 +30,7 @@ class AppInitializationUseCase {
       await prefs.setBool('isFirstRun', false);
     } else {
       // 📦 Cargar desde cache
+      await masterRepository.fetchAndCacheMasterData();
       _cachedMaster = await masterRepository.getMasterFromCache();
       _cachedUser = await userRepository.getUserFromCache();
     }
