@@ -67,7 +67,7 @@
 
 ## 📹 Demo de la Aplicación
 
-**[📺 Ver video demo](https://youtube.com/shorts/w5lfyp5derU?si=acRLtyHSoY-WnqGA)(#)**
+**[📺 Ver video demo](https://youtube.com/shorts/w5lfyp5derU?si=acRLtyHSoY-WnqGA)**
 
 ---
 
