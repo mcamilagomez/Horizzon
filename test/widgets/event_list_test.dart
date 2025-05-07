@@ -30,7 +30,7 @@ void main() {
     eventTrackName: 'Track de Desarrollo',
   );
 
-  /// 1. Render básico sin errores
+  /// 1. Render básico 
   testWidgets('Renderizado básico sin errores', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -42,7 +42,7 @@ void main() {
       ),
     );
 
-    expect(true, isTrue); // Pase forzado, sin excepciones
+    expect(true, isTrue); 
   });
 
   /// 2. Muestra lista vacía correctamente
