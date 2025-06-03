@@ -5,8 +5,8 @@ import 'package:horizzon/domain/entities/user.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/top_nav_bar.dart';
 import '../controllers/theme_controller.dart';
-
 import 'package:horizzon/ui/widgets/eventos_content/event_track_eventos.dart';
+import 'package:horizzon/domain/use_case/use_case.dart';
 
 class EventosPage extends StatefulWidget {
   final User user;
@@ -21,13 +21,35 @@ class _EventosPageState extends State<EventosPage> {
   final Map<int, bool> _expandedTracks = {};
   final ThemeController themeController = Get.find<ThemeController>();
 
-  final Key stateKey = const Key('EventosPageState');
+  Master? _master;
+
   @override
   void initState() {
     super.initState();
-    for (var track in widget.master.eventTracks) {
-      _expandedTracks[track.id] = false;
+    _master = widget.master;
+    _initializeExpansionStates(_master!);
+
+    _refreshMaster(); // ✅ Refrescar al cargar
+  }
+
+  void _initializeExpansionStates(Master master) {
+    for (var track in master.eventTracks) {
+      _expandedTracks.putIfAbsent(track.id, () => false);
     }
+  }
+
+  Future<void> _refreshMaster() async {
+    final appInit = Get.find<AppInitializationUseCase>();
+    await appInit.refreshMasterData();
+
+    if (!mounted) return;
+
+    setState(() {
+      _master = appInit.master;
+      _initializeExpansionStates(_master!);
+    });
+
+    print("✅ Se hizo refresh de master desde EventosPage");
   }
 
   void _toggleTrackExpansion(int trackId) {
@@ -61,41 +83,46 @@ class _EventosPageState extends State<EventosPage> {
                 ),
                 child: Container(
                   color: backgroundColor,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "allEvents".tr,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: primaryColor,
+                  child: _master == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(24, 24, 24, 16),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "allEvents".tr,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: primaryColor,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                            Expanded(
+                              child: ListView.builder(
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                                itemCount: _master!.eventTracks.length,
+                                itemBuilder: (context, index) {
+                                  final track = _master!.eventTracks[index];
+                                  return EventTrackCard(
+                                    track: track,
+                                    isExpanded:
+                                        _expandedTracks[track.id] ?? false,
+                                    primaryColor: primaryColor,
+                                    isDark: isDark,
+                                    user: widget.user,
+                                    onToggleExpand: _toggleTrackExpansion,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                          itemCount: widget.master.eventTracks.length,
-                          itemBuilder: (context, trackIndex) {
-                            final track = widget.master.eventTracks[trackIndex];
-                            return EventTrackCard(
-                              track: track,
-                              isExpanded: _expandedTracks[track.id] ?? false,
-                              primaryColor: primaryColor,
-                              isDark: isDark,
-                              user: widget.user,
-                              onToggleExpand: _toggleTrackExpansion,
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ),
             ),

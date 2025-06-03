@@ -17,6 +17,16 @@ class AppInitializationUseCase {
     required this.userRepository,
   });
 
+  /// 🔄 Solo refresca master
+  Future<void> refreshMasterData() async {
+    await masterRepository.fetchAndCacheMasterData();
+    _cachedMaster = await masterRepository.getMasterFromCache();
+
+    if (_cachedMaster == null) {
+      throw Exception("No se pudo refrescar el master.");
+    }
+  }
+
   Future<void> initializeApp() async {
     final prefs = await SharedPreferences.getInstance();
     final isFirstRun = prefs.getBool('isFirstRun') ?? true;

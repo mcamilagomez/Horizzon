@@ -69,7 +69,7 @@ class FeedbackbyUser {
 
   factory FeedbackbyUser.fromJson(Map<String, dynamic> json) {
     return FeedbackbyUser(
-      userId: json['user_id'],
+      userId: "user_22354334234",
       stars: json['stars'],
       comment: json['comment'],
     );

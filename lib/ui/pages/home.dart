@@ -3,13 +3,15 @@ import 'package:get/get.dart';
 import 'package:horizzon/domain/entities/event.dart';
 import 'package:horizzon/domain/entities/master.dart';
 import 'package:horizzon/domain/entities/user.dart';
+import 'package:horizzon/domain/entities/event_track.dart';
+import 'package:horizzon/domain/use_case/use_case.dart';
 
 import 'package:horizzon/ui/widgets/bottom_nav_bar.dart';
 import 'package:horizzon/ui/widgets/home_content/home_content.dart';
 import 'package:horizzon/ui/widgets/top_nav_bar.dart';
-import 'package:horizzon/domain/entities/event_track.dart';
-import 'dart:math';
 import 'package:horizzon/ui/controllers/theme_controller.dart';
+
+import 'dart:math';
 
 class HomePage extends StatefulWidget {
   final Master master;
@@ -26,12 +28,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<Event> randomEvents;
+  List<Event> randomEvents = [];
 
   @override
   void initState() {
     super.initState();
-    randomEvents = _getRandomEvents(widget.master.eventTracks, 20);
+    _refreshAndLoadEvents();
+  }
+
+  Future<void> _refreshAndLoadEvents() async {
+    final appInit = Get.find<AppInitializationUseCase>();
+    await appInit.refreshMasterData();
+
+    if (!mounted) return;
+
+    final Master updatedMaster = appInit.master;
+    final List<Event> updatedEvents =
+        _getRandomEvents(updatedMaster.eventTracks, 20);
+
+    setState(() {
+      randomEvents = updatedEvents;
+    });
+
+    print("✅ Se hizo refresh de master desde HomePage");
   }
 
   List<Event> _getRandomEvents(List<EventTrack> eventTracks, int count) {

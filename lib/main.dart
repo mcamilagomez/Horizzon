@@ -64,22 +64,24 @@ Future<void> main() async {
     localDataSource: masterLocal,
   );
 
-  // Inicializar la app
+  // 🔁 Inicializar App y registrar con Get
   final appInit = AppInitializationUseCase(
     masterRepository: masterRepo,
     userRepository: userRepo,
   );
 
   await appInit.initializeApp();
+
+  // ✅ Registrar AppInitializationUseCase en GetX
+  Get.put(appInit);
+
+  // 🚀 Refrescar master después de inicializar
+  await appInit.refreshMasterData();
+
   final User user = appInit.user;
   final Master master = appInit.master;
 
-  print("🖼️ Descripción:");
-  print(master.eventTracks[0].description);
-  print("🖼️ Longitud de imagen base64:");
-  print(master.eventTracks[0].coverImageUrl.length);
-
-  // Inyectar controladores globales con GetX
+  // Inyectar controladores globales
   Get.put(ThemeController());
   Get.put(LanguageController());
 
